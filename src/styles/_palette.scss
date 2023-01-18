@@ -1,0 +1,24 @@
+// Палитра цветов по оттенкам
+$white-color: #FFFFFF;
+$black-color: #000000;
+
+$gray-color-100: #F4F4F4;
+$gray-color-200: #D9D9D9;
+
+/* Цветовая схема светлой темы */
+@mixin light-theme-css-vars {
+    --background-color-0: #{$white-color};
+    --background-color-50: #{$gray-color-100};
+    --background-color-100: #{$gray-color-200};
+
+    --text-color-regular: #{$black-color};
+    --text-color-link: #{$black-color};
+
+    --color-error: #EE8F00;
+    --color-warning: #F62626;
+    --color-success: #0BB526;
+}
+
+:root {
+    @include light-theme-css-vars();
+}
