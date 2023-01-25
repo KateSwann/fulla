@@ -1,15 +1,8 @@
 <template>
-  <div class="article">
+  <main class="article">
     <h1>This is an article page</h1>
-  </div>
+  </main>
 </template>
 
-<style>
-@media (min-width: 1024px) {
-  .article {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-  }
-}
+<style lang="scss">
 </style>

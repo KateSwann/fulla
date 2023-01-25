@@ -1,7 +1,8 @@
 <script setup>
 import { useScreen, useGrid } from 'vue-screen'
 
-import ResultItemCard from '@/components/ResultItemCard.vue'
+import ResultItemBigScreenCard from '@/components/ResultItemBigScreenCard.vue'
+import ResultItemSmallScreenCard from '@/components/ResultItemSmallScreenCard.vue'
 
 const screen = useScreen({})
 const grid = useGrid({
@@ -15,53 +16,53 @@ const grid = useGrid({
 </script>
 
 <template>
-    <main class="search-page">
+    <main class="search-view">
+        <!-- START Содержание контента - mobile -->
+        <div class="search-view__content"
+             v-show="grid.isMobile">
+            <ResultItemSmallScreenCard
+                v-for="index in 10"
+                :key="index">
+            </ResultItemSmallScreenCard>
+        </div>
+        <!-- END Содержание контента - mobile -->
+
+        <!-- START Содержание контента - tablet -->
+        <div class="search-view__content"
+             v-show="grid.isTablet">
+            <ResultItemSmallScreenCard
+                v-for="index in 10"
+                :key="index">
+            </ResultItemSmallScreenCard>
+        </div>
+        <!-- END Содержание контента - tablet -->
+
+        <!-- START Содержание контента - desktop -->
+        <div class="search-view__content"
+             v-show="grid.isDesktop">
+            <div class="search-view__left-column">
+                <ResultItemBigScreenCard
+                    v-for="index in 10"
+                    :key="index">
+                </ResultItemBigScreenCard>
+            </div>
+
+            <div class="search-view__right-column">
+                RR
+            </div>
+        </div>
+        <!-- END Содержание контента - desktop -->
+
         <div>
             <p>Screen width is {{ screen.width }}</p>
             <p>Screen height is {{ screen.height }}</p>
             <p>Current breakpoint is {{ grid.breakpoint }}</p>
         </div>
-
-        <!-- START Содержание контента - mobile -->
-        <div class="search-page__content"
-             v-show="grid.isMobile">
-            <ResultItemCard
-                v-for="index in 10"
-                :key="index">
-            </ResultItemCard>
-        </div>
-        <!-- END Содержание контента - mobile -->
-
-        <!-- START Содержание контента - tablet -->
-        <div class="search-page__content"
-             v-show="grid.isTablet">
-            <ResultItemCard
-                v-for="index in 10"
-                :key="index">
-            </ResultItemCard>
-        </div>
-        <!-- END Содержание контента - tablet -->
-
-        <!-- START Содержание контента - desktop -->
-        <div class="search-page__content"
-             v-show="grid.isDesktop">
-            <div class="search-page__left-column">
-                <ResultItemCard
-                    v-for="index in 10"
-                    :key="index">
-                </ResultItemCard>
-            </div>
-
-            <div class="search-page__right-column">
-                RR
-            </div>
-        </div>
-        <!-- END Содержание контента - desktop -->
     </main>
 </template>
 
 <style lang="scss">
-.search-page {
+.search-view {
     &__content {}
 
     @media (max-width: 767px) {
@@ -77,9 +78,16 @@ const grid = useGrid({
     }
 
     @media (min-width: 1440px) {
+        $header-hight: 108px;
+
+        &__header-wrapper {
+            height: $header-hight;
+        }
+
         &__content {
             max-width: 1320px;
             margin: 0 auto;
+            padding-top: $header-hight;
             display: flex;
         }
 
@@ -87,11 +95,25 @@ const grid = useGrid({
             flex: 1;
             max-width: calc(50% - 60px);
             background-color: gold;
+
+            &:hover {
+                box-shadow: inset -1px 0px 0px 0px rgba(217,217,217,0.6);
+
+                &+.search-view__right-column {
+                    background: var(--background-color-0);
+                }
+            }
         }
 
         &__right-column {
             flex: 1;
-            background-color: antiquewhite;
+            background: linear-gradient(90deg, rgba(255,255,255,1) 60px, rgba(217,217,217,1) 60px);
+        }
+
+        .result-item-card {
+            &:hover {
+                box-shadow: inset 0 -1px 0 0 rgba(0,0,0,0.1);
+            }
         }
     }
 }
