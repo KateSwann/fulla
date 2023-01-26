@@ -1,3 +1,7 @@
+<script setup>
+import ArticleLabelsList from './Article/ArticleLabelsList.vue'
+</script>
+
 <template>
     <div class="result-item-big-card-container">
         <article class="result-item-big-card">
@@ -21,6 +25,8 @@
         </article>
 
         <article class="result-item-big-preview-card">
+            <ArticleLabelsList />
+
             <RouterLink :to="{ name: 'article'}"
                         class="result-item-big-preview-card__title-link">
                 <h2 class="result-item-big-preview-card__title">
@@ -141,7 +147,7 @@
 .result-item-big-preview-card {
     display: none;
     width: 720px;
-    padding: 37px 90px;
+    padding: 37px 90px 37px 150px;
     position: fixed;
     top: 129px;
     left: calc(50% - 60px);
