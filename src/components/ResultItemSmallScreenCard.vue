@@ -1,3 +1,7 @@
+<script setup>
+import ArticleSocialCard from './Article/ArticleSocialCard.vue'
+</script>
+
 <template>
     <article class="result-item-small-card">
         <div class="result-item-small-card__side-content">
@@ -19,6 +23,8 @@
                 </span>
                 <span class="result-item-small-card__button-read-more">Читать подробнее</span>
             </p>
+
+            <ArticleSocialCard />
         </div>
     </article>
 </template>
@@ -49,11 +55,15 @@
         .result-item-small-card__button-read-more {
             display: inline-block;
         }
+
+        .article-social-network-card {
+            display: flex;
+        }
     }
 
     &__side-content {
         font: 400 10px/1.4 'Helvetica Neue';
-        opacity: .4;
+        color: rgba($color: #000000, $alpha: .4);
     }
 
     &__title-link {
@@ -75,7 +85,7 @@
     &__text {
         font: 400 12px/1.4 'Roboto Mono';
         letter-spacing: -0.03em;
-        opacity: .6;
+        color: rgba($color: #000000, $alpha: .6);
     }
 
     &__button-read-more {
@@ -85,11 +95,19 @@
         cursor: pointer;
     }
 
+    .article-social-network-card {
+        display: none;
+    }
+
     @media (max-width: 767px) {
         padding: 12px 20px;
 
         &__side-content {
             margin-bottom: 4px;
+        }
+
+        .article-social-network-card {
+            margin: 22px 0 15px;
         }
     }
 
@@ -104,6 +122,10 @@
             padding-right: 35px;
             display: flex;
             flex-direction: column;
+        }
+
+        .article-social-network-card {
+            margin: 24px 0 30px;
         }
     }
 }

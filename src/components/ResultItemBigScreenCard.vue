@@ -1,5 +1,6 @@
 <script setup>
 import ArticleLabelsList from './Article/ArticleLabelsList.vue'
+import ArticleSocialCard from './Article/ArticleSocialCard.vue'
 </script>
 
 <template>
@@ -38,6 +39,8 @@ import ArticleLabelsList from './Article/ArticleLabelsList.vue'
                 Грузинские банки не открывают счета иностранцам, в том числе россиянам, удаленно. Единственное, что можно сделать, это подать с помощью доверенного представителя документы на открытие счета в Грузии, а также заполнить анкету KYC. Однако в случае одобрения, чтобы завершить процедуру, понадобиться личное присутствие заявителя в отделении банка в Грузии.
                 <span class="result-item-big-preview-card__button-read-more">Читать подробнее</span>
             </p>
+
+            <ArticleSocialCard />
         </article>
     </div>
 </template>
@@ -54,7 +57,7 @@ import ArticleLabelsList from './Article/ArticleLabelsList.vue'
 
     &__side-content {
         font: 400 10px/1.4 'Helvetica Neue';
-        opacity: .4;
+        color: rgba($color: #000000, $alpha: .4);
     }
 
     &__main-content {}
@@ -73,7 +76,7 @@ import ArticleLabelsList from './Article/ArticleLabelsList.vue'
     &__text {
         font: 400 12px/1.4 'Roboto Mono';
         letter-spacing: -0.03em;
-        opacity: .6;
+        color: rgba($color: #000000, $alpha: .6);
         margin: 0;
         padding: 0;
     }
@@ -178,6 +181,10 @@ import ArticleLabelsList from './Article/ArticleLabelsList.vue'
         cursor: pointer;
     }
 
+    .article-social-network-card {
+        margin-top: 40px;
+    }
+
     @media (max-width: 767px) {
         &__title-link {}
 
@@ -206,7 +213,7 @@ import ArticleLabelsList from './Article/ArticleLabelsList.vue'
         &__title-link {}
 
         &__title {
-            margin-bottom: 8px;
+            margin-bottom: 20px;
             text-align: center;
         }
 
