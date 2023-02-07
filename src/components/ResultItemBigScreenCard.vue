@@ -1,6 +1,7 @@
 <script setup>
 import ArticleLabelsList from './Article/ArticleLabelsList.vue'
 import ArticleSocialCard from './Article/ArticleSocialCard.vue'
+import ArticleQuestionsSection from './Article/ArticleQuestionsSection.vue'
 </script>
 
 <template>
@@ -41,6 +42,10 @@ import ArticleSocialCard from './Article/ArticleSocialCard.vue'
             </p>
 
             <ArticleSocialCard />
+
+            <hr class="result-item-big-preview-card__sections-divider">
+
+            <ArticleQuestionsSection />
         </article>
     </div>
 </template>
@@ -179,6 +184,11 @@ import ArticleSocialCard from './Article/ArticleSocialCard.vue'
         font-weight: 700;
         border-bottom: 1px solid;
         cursor: pointer;
+    }
+
+    &__sections-divider {
+        margin: 58px 0 32px;
+        border-color: rgba($color: #000000, $alpha: .1);
     }
 
     .article-social-network-card {
