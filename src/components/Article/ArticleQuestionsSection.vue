@@ -1,6 +1,7 @@
 <script setup>
-import IconCross from '@/components/Icons/IconCross.vue'
-import IconSearch from '@/components/Icons/IconSearch.vue'
+import IconCross from '@/components/Icons/Controls/IconCross.vue'
+import IconSearch from '@/components/Icons/Controls/IconSearch.vue'
+import ArticleQuestionItem from '@/components/Article/ArticleQuestionItem.vue'
 </script>
 
 <template>
@@ -16,6 +17,12 @@ import IconSearch from '@/components/Icons/IconSearch.vue'
 
             <IconSearch class="questions-searchbar-search-icon" />
         </div>
+
+        <div class="article-questions-section__questions-list">
+            <ArticleQuestionItem class="article-questions-section__questions-list-item" />
+            <ArticleQuestionItem class="article-questions-section__questions-list-item" />
+        </div>
+
     </section>
 </template>
 
@@ -23,6 +30,7 @@ import IconSearch from '@/components/Icons/IconSearch.vue'
 .article-questions-section {
     .article-questions-section-header {
         display: flex;
+        margin-bottom: 40px;
         flex-direction: row-reverse;
         align-items: center;
         justify-content: space-between;
@@ -74,6 +82,29 @@ import IconSearch from '@/components/Icons/IconSearch.vue'
             }
         }
     }
-}
 
+    @media (max-width: 767px) {
+        &__questions-list-item {
+            &:not(:last-child) {
+                margin-bottom: 48px;
+            }
+        }
+    }
+
+    @media (min-width: 768px) and (max-width: 1439px) {
+        &__questions-list-item {
+            &:not(:last-child) {
+                margin-bottom: 40px;
+            }
+        }
+    }
+
+    @media (min-width: 1440px) {
+        &__questions-list-item {
+            &:not(:last-child) {
+                margin-bottom: 40px;
+            }
+        }
+    }
+}
 </style>
