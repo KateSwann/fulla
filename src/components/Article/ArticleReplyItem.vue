@@ -1,44 +1,66 @@
 <script setup>
 import IconSocialTg from '@/components/Icons/Social/IconSocialTg.vue'
+
+const props = defineProps({
+    replyItem: {
+        replyDateTime: String,
+        replyText: String,
+        replyAuthorName: String,
+        replyRating: Number,
+        replyReplies: Array,
+    }
+});
 </script>
 
 <template>
     <div class="question-reply">
-        <span class="question-reply__time">14 Апр 2022, 18:44</span>
+        <div class="question-reply__body">
+            <span class="question-reply__time">{{ replyItem.replyDateTime }}</span>
 
-        <p class="question-reply__text">
-            Я думаю, что во всех банках примерно такие правила - по крайней мере, в Грузии
-        </p>
+            <p class="question-reply__text">{{ replyItem.replyText }}</p>
 
-        <div class="question-reply__info-block">
-            <span class="question-reply__social-network-icon">
-                <IconSocialTg />
-            </span>
+            <div class="question-reply__info-block">
+                <span class="question-reply__social-network-icon">
+                    <IconSocialTg />
+                </span>
 
-            <span class="question-reply__author-name">Anna Na****</span>
+                <span class="question-reply__author-name">{{ replyItem.replyAuthorName }}</span>
+            </div>
+
+            <div class="rating-controls">
+                <input type="button"
+                    value="-"
+                    class="rating-controls__button"
+                    data-reply-rating-for="reply-rating">
+
+                <span class="rating-controls__counter">{{ replyItem.replyRating }}</span>
+
+                <input type="button"
+                    value="+"
+                    class="rating-controls__button"
+                    data-reply-rating-for="reply-rating">
+            </div>
         </div>
 
-        <div class="rating-controls">
-            <input type="button"
-                value="-"
-                class="rating-controls__button"
-                data-reply-rating-for="reply-rating">
-
-            <span class="rating-controls__counter">144</span>
-
-            <input type="button"
-                value="+"
-                class="rating-controls__button"
-                data-reply-rating-for="reply-rating">
-        </div>
+        <template v-if="replyItem.replyReplies.length">
+            <template v-for="(replyItem, index) in replyItem.replyReplies"
+                      :key="index">
+                <ArticleReplyItem class="article-question-item__reply-item"
+                                  :replyItem=replyItem
+                                  />
+            </template>
+        </template>
     </div>
 </template>
 
 <style lang="scss">
 .question-reply {
-    padding: 10px 104px 20px 16px;
+    padding: 10px 0 0 16px;
     border-left: 2px solid #000000;
-    position: relative;
+
+    &__body {
+        position: relative;
+    }
 
     &__time {
         display: block;
@@ -73,13 +95,42 @@ import IconSocialTg from '@/components/Icons/Social/IconSocialTg.vue'
 
     .rating-controls {
         position: absolute;
-        right: 0;
-        top: calc(50% - 14px);
     }
 
     @media (max-width: 767px) {
+        &__body {
+            padding-bottom: 0px;
+        }
+
         &__text {
             font: 14px;
+        }
+
+        .rating-controls {
+            bottom: 0;
+            right: 0;
+        }
+    }
+
+    @media (min-width: 768px) and (max-width: 1439px) {
+        &__body {
+            padding-bottom: 22px;
+        }
+
+        .rating-controls {
+            right: -104px;
+            top: 33px;
+        }
+    }
+
+    @media (min-width: 1440px) {
+        &__body {
+            padding-bottom: 22px;
+        }
+
+        .rating-controls {
+            right: -104px;
+            top: 33px;
         }
     }
 }

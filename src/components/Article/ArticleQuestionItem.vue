@@ -1,5 +1,45 @@
 <script setup>
+import { ref } from 'vue';
+
 import ArticleReplyItem from '@/components/Article/ArticleReplyItem.vue'
+
+const testRepliesListData = [
+    {
+        replyDateTime: '14 Апр 2022, 18:44',
+        replyText: 'Все равно. Банк интересует чтобы у клиента был источник дохода.У меня договор на консультационные услуги с фирмой в USA.',
+        replyAuthorName: 'Anna Na****',
+        replyRating: 17,
+        replyReplies: [],
+    },
+    {
+        replyDateTime: '14 Апр 2022, 18:44',
+        replyText: 'Карта на 4 года, от 3-х дней для именной карты, от 2-х для неименной.',
+        replyAuthorName: 'Vikk****',
+        replyRating: 0,
+        replyReplies: [
+            {
+                replyDateTime: '14 Апр 2022, 18:44',
+                replyText: 'для открытия потребовали Грузинский номер, но затем можно перепривязать на российский. Почему сразу на него не открыть непонятно - мб тетки в офисе просто не в курсе.',
+                replyAuthorName: 'Mnchest****',
+                replyRating: 5,
+                replyReplies: [],
+            },
+            {
+                replyDateTime: '14 Апр 2022, 18:44',
+                replyText: 'Что касается "зачем" - если вам не нужно, то и вопроса нет.',
+                replyAuthorName: 'Looll****',
+                replyRating: 199,
+                replyReplies: [],
+            }
+        ]
+    },
+];
+
+let isQuestionOpened = ref(true);
+
+function toggleQuestionRepliesDisplay() {
+    isQuestionOpened.value = !isQuestionOpened.value;
+}
 </script>
 
 <template>
@@ -9,10 +49,20 @@ import ArticleReplyItem from '@/components/Article/ArticleReplyItem.vue'
         </h3>
 
         <div class="article-question-item__body">
-            <ArticleReplyItem />
+            <template v-for="(replyItem, index) in testRepliesListData"
+                      :key="index">
+                <ArticleReplyItem class="article-question-item__reply-item"
+                                  :class="{ 'article-question-item__reply-item--opened': isQuestionOpened }"
+                                  :replyItem=replyItem
+                                  />
+            </template>
         </div>
 
-        <span class="article-question-item__read-more">См. все ответы</span>
+        <span class="article-question-item__read-more"
+              :class="{ 'article-question-item__read-more--opened': isQuestionOpened }"
+              @click="toggleQuestionRepliesDisplay">
+              {{ isQuestionOpened ? "Свернуть" : "См. все ответы" }}
+        </span>
     </article>
 </template>
 
@@ -22,6 +72,19 @@ import ArticleReplyItem from '@/components/Article/ArticleReplyItem.vue'
         margin-bottom: 8px;
         font: 700 20px/1.12 'Helvetica';
         letter-spacing: -0.05em;
+    }
+
+    &__reply-item {
+        &:not(:last-child) {
+            margin-bottom: 6px;
+        }
+
+        &--opened {
+            &.question-reply,
+            .question-reply {
+                border-left-color: rgba($color: #000000, $alpha: .1);
+            }
+        }
     }
 
     &__read-more {
@@ -45,6 +108,29 @@ import ArticleReplyItem from '@/components/Article/ArticleReplyItem.vue'
                                                      var(--text-color-regular) 2px,
                                                      transparent 2px,
                                                      transparent 4px);
+        }
+
+        &--opened {
+            color: rgba($color: #000000, $alpha: .4);
+
+            &::before {
+                height: 2px;
+                top: calc(50% - 1px);
+                background-color: rgba($color: #000000, $alpha: .4);
+                background-image: none;
+            }
+        }
+    }
+
+    @media (min-width: 768px) and (max-width: 1439px) {
+        &__body {
+            padding-right: 104px;
+        }
+    }
+
+    @media (min-width: 1440px) {
+        &__body {
+            padding-right: 104px;
         }
     }
 }

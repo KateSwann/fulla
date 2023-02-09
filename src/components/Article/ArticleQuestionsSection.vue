@@ -20,9 +20,7 @@ import ArticleQuestionItem from '@/components/Article/ArticleQuestionItem.vue'
 
         <div class="article-questions-section__questions-list">
             <ArticleQuestionItem class="article-questions-section__questions-list-item" />
-            <ArticleQuestionItem class="article-questions-section__questions-list-item" />
         </div>
-
     </section>
 </template>
 
