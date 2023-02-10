@@ -1,5 +1,7 @@
 <script setup>
 import ArticleSocialCard from './Article/ArticleSocialCard.vue'
+import IconCross from '@/components/Icons/Controls/IconCross.vue'
+import IconOpen from '@/components/Icons/Controls/IconOpen.vue'
 </script>
 
 <template>
@@ -24,6 +26,18 @@ import ArticleSocialCard from './Article/ArticleSocialCard.vue'
                 <span class="result-item-small-card__button-read-more">Читать подробнее</span>
             </p>
 
+            <div class="controls-buttons-group">
+                <div class="controls-buttons-group__button
+                            controls-buttons-group__button--open">
+                    <IconOpen />
+                </div>
+
+                <div class="controls-buttons-group__button
+                            controls-buttons-group__button--close">
+                    <IconCross />
+                </div>
+            </div>
+
             <ArticleSocialCard />
         </div>
     </article>
@@ -31,6 +45,7 @@ import ArticleSocialCard from './Article/ArticleSocialCard.vue'
 
 <style lang="scss">
 .result-item-small-card {
+    position: relative;
     color: var(--text-color-regular);
 
     &:hover {
@@ -57,6 +72,10 @@ import ArticleSocialCard from './Article/ArticleSocialCard.vue'
         }
 
         .article-social-network-card {
+            display: flex;
+        }
+
+        .controls-buttons-group {
             display: flex;
         }
     }
@@ -99,15 +118,57 @@ import ArticleSocialCard from './Article/ArticleSocialCard.vue'
         display: none;
     }
 
+    .controls-buttons-group {
+        display: none;
+        position: absolute;
+
+        &__button {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: var(--background-color-0);
+            cursor: pointer;
+
+            &:not(:last-child) {
+                margin-right: 4px;
+            }
+
+            &--close {
+                .fill-color {
+                    fill: var(--text-color-regular);
+                    opacity: 1;
+                }
+            }
+
+            &--open {
+                .fill-color {
+                    stroke: var(--text-color-regular);
+                }
+            }
+        }
+    }
+
     @media (max-width: 767px) {
-        padding: 12px 20px;
+        padding: 18px 20px;
 
         &__side-content {
             margin-bottom: 4px;
         }
 
+        &__title {
+            min-height: 44px;
+        }
+
         .article-social-network-card {
             margin: 22px 0 15px;
+        }
+
+        .controls-buttons-group {
+            top: 36px;
+            right: 20px;
         }
     }
 
@@ -126,6 +187,11 @@ import ArticleSocialCard from './Article/ArticleSocialCard.vue'
 
         .article-social-network-card {
             margin: 24px 0 30px;
+        }
+
+        .controls-buttons-group {
+            top: 12px;
+            right: 12px;
         }
     }
 }

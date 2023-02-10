@@ -76,6 +76,10 @@ import ArticleQuestionItem from '@/components/Article/ArticleQuestionItem.vue'
                 & ~ .questions-searchbar-search-icon {
                     right: calc(100% - 18px);
                     transition: 200ms ease-in;
+
+                    .fill-color {
+                        fill: rgba($color: #000000, $alpha: .3);
+                    }
                 }
             }
         }

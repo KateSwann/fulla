@@ -2,6 +2,8 @@
 import ArticleLabelsList from './Article/ArticleLabelsList.vue'
 import ArticleSocialCard from './Article/ArticleSocialCard.vue'
 import ArticleQuestionsSection from './Article/ArticleQuestionsSection.vue'
+import IconCross from '@/components/Icons/Controls/IconCross.vue'
+import IconOpen from '@/components/Icons/Controls/IconOpen.vue'
 </script>
 
 <template>
@@ -41,6 +43,18 @@ import ArticleQuestionsSection from './Article/ArticleQuestionsSection.vue'
                 <span class="result-item-big-preview-card__button-read-more">Читать подробнее</span>
             </p>
 
+            <div class="controls-buttons-group">
+                <div class="controls-buttons-group__button
+                            controls-buttons-group__button--close">
+                    <IconCross />
+                </div>
+
+                <div class="controls-buttons-group__button
+                            controls-buttons-group__button--open">
+                    <IconOpen />
+                </div>
+            </div>
+
             <ArticleSocialCard />
 
             <hr class="result-item-big-preview-card__sections-divider">
@@ -58,14 +72,10 @@ import ArticleQuestionsSection from './Article/ArticleQuestionsSection.vue'
         background-color: var(--background-color-50);
     }
 
-    &__date {}
-
     &__side-content {
         font: 400 10px/1.4 'Helvetica Neue';
         color: rgba($color: #000000, $alpha: .4);
     }
-
-    &__main-content {}
 
     &__title-link {
         display: block;
@@ -89,19 +99,9 @@ import ArticleQuestionsSection from './Article/ArticleQuestionsSection.vue'
     @media (max-width: 767px) {
         padding: 12px 20px;
 
-        &__date {}
-
         &__side-content {
             margin-bottom: 4px;
         }
-
-        &__main-content {}
-
-        &__title-link {}
-
-        &__title {}
-
-        &__text {}
     }
 
     @media (min-width: 768px) and (max-width: 1439px) {
@@ -110,22 +110,12 @@ import ArticleQuestionsSection from './Article/ArticleQuestionsSection.vue'
         padding: 20px 40px;
         border-radius: 16px;
 
-        &__date {}
-
         &__side-content {
             flex: 0 0 100px;
             padding-right: 35px;
             display: flex;
             flex-direction: column;
         }
-
-        &__main-content {}
-
-        &__title-link {}
-
-        &__title {}
-
-        &__text {}
     }
 
     @media (min-width: 1440px) {
@@ -133,22 +123,12 @@ import ArticleQuestionsSection from './Article/ArticleQuestionsSection.vue'
         flex-wrap: nowrap;
         padding: 20px 64px 20px 36px;
 
-        &__date {}
-
         &__side-content {
             flex: 0 0 100px;
             padding-right: 35px;
             display: flex;
             flex-direction: column;
         }
-
-        &__main-content {}
-
-        &__title-link {}
-
-        &__title {}
-
-        &__text {}
     }
 }
 
@@ -195,33 +175,56 @@ import ArticleQuestionsSection from './Article/ArticleQuestionsSection.vue'
         margin-top: 40px;
     }
 
+    .controls-buttons-group {
+        display: flex;
+        flex-direction: column;
+        position: fixed;
+        right: calc(50% - 645px);
+        top: 116px;
+        z-index: 5;
+
+        &__button {
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background-color: var(--background-color-50);
+            cursor: pointer;
+
+            &:not(:last-child) {
+                margin-bottom: 12px;
+            }
+
+            &--close {
+                .fill-color {
+                    fill: var(--text-color-regular);
+                    opacity: 1;
+                }
+            }
+
+            &--open {
+                .fill-color {
+                    stroke: var(--text-color-regular);
+                }
+            }
+        }
+    }
+
     @media (max-width: 767px) {
-        &__title-link {}
-
-        &__title {}
-
-        &__text {}
-
         &__button-read-more {
             display: block;
         }
     }
 
     @media (min-width: 768px) and (max-width: 1439px) {
-        &__title-link {}
-
-        &__title {}
-
-        &__text {}
-
         &__button-read-more {
             display: block;
         }
     }
 
     @media (min-width: 1440px) {
-        &__title-link {}
-
         &__title {
             margin-bottom: 20px;
             text-align: center;
@@ -230,8 +233,6 @@ import ArticleQuestionsSection from './Article/ArticleQuestionsSection.vue'
         &__text {
             text-align: center;
         }
-
-        &__button-read-more {}
     }
 }
 
