@@ -63,13 +63,15 @@ export default {
         }
 
         &__content {
-            overflow: auto;
+            overflow-y: auto;
+            overflow-x: hidden;
+            padding-right: 20px;
         }
     }
 
     @media (max-width: 767px) {
         .modal-window {
-            padding: 24px 20px 0;
+            padding: 24px 0 24px 24px;
             border-radius: 24px 24px 0 0;
 
             &__close-icon {
@@ -80,7 +82,7 @@ export default {
 
     @media (min-width: 768px) and (max-width: 1439px) {
         .modal-window {
-            padding: 38px 64px 0;
+            padding: 38px 44px 0 64px;
             border-radius: 20px 20px 0 0;
 
             &__close-icon {

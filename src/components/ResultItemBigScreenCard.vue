@@ -66,8 +66,9 @@ const props = defineProps({
                 </div>
 
                 <div class="controls-buttons-group__button
-                            controls-buttons-group__button--open">
-                    <IconOpen @click="toggleResultItemPopup" />
+                            controls-buttons-group__button--open"
+                            @click="toggleResultItemPopup">
+                    <IconOpen />
                 </div>
             </div>
 

@@ -46,8 +46,9 @@ const props = defineProps({
 
             <div class="controls-buttons-group">
                 <div class="controls-buttons-group__button
-                            controls-buttons-group__button--open">
-                    <IconOpen @click="toggleResultItemPopup" />
+                            controls-buttons-group__button--open"
+                            @click="toggleResultItemPopup">
+                    <IconOpen />
                 </div>
 
                 <div class="controls-buttons-group__button
@@ -56,7 +57,7 @@ const props = defineProps({
                 </div>
             </div>
 
-            <ArticleSocialCard />
+            <ArticleSocialCard class="result-item-small-card__article-social-network-card"  />
         </div>
 
         <ResultItemArticlePopup class="modal-window-fillin"
@@ -96,7 +97,7 @@ const props = defineProps({
             display: inline-block;
         }
 
-        .article-social-network-card {
+        .result-item-small-card__article-social-network-card {
             display: flex;
         }
 
@@ -143,7 +144,7 @@ const props = defineProps({
         cursor: pointer;
     }
 
-    .article-social-network-card {
+    .result-item-small-card__article-social-network-card {
         display: none;
     }
 
@@ -191,7 +192,7 @@ const props = defineProps({
             min-height: 44px;
         }
 
-        .article-social-network-card {
+        .result-item-small-card__article-social-network-card {
             margin: 22px 0 15px;
         }
 
@@ -214,7 +215,7 @@ const props = defineProps({
             flex-direction: column;
         }
 
-        .article-social-network-card {
+        .result-item-small-card__article-social-network-card {
             margin: 24px 0 30px;
         }
 
