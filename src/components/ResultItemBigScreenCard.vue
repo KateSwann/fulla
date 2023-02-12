@@ -1,30 +1,48 @@
 <script setup>
+import { ref }  from 'vue'
+
 import ArticleLabelsList from './Article/ArticleLabelsList.vue'
 import ArticleSocialCard from './Article/ArticleSocialCard.vue'
 import ArticleQuestionsSection from './Article/ArticleQuestionsSection.vue'
 import IconCross from '@/components/Icons/Controls/IconCross.vue'
 import IconOpen from '@/components/Icons/Controls/IconOpen.vue'
+import ResultItemArticlePopup from '@/components/ResultItemArticlePopup.vue'
+
+let isShowResultItemPopup = ref(false);
+
+function toggleResultItemPopup() {
+    isShowResultItemPopup.value = !isShowResultItemPopup.value;
+}
+
+function cancel() {
+    isShowResultItemPopup.value = false;
+}
+
+const props = defineProps({
+    resultItem: {
+        resultTitle: String,
+        resultText: String,
+        resultDate: String,
+        resultTime: Number,
+    }
+});
 </script>
 
 <template>
     <div class="result-item-big-card-container">
         <article class="result-item-big-card">
             <div class="result-item-big-card__side-content">
-                <span class="result-item-big-card__date">14 Апр 2022,</span>
-                <span class="result-item-big-card__time">14:12</span>
+                <span class="result-item-big-card__date">{{ resultItem.resultDate }},</span>
+                <span class="result-item-big-card__time">{{ resultItem.resultTime }}</span>
             </div>
 
             <div class="result-item-big-card__main-content">
                 <RouterLink :to="{ name: 'article'}"
                             class="result-item-big-card__title-link">
-                    <h2 class="result-item-big-card__title">
-                        В какой стране можно открыть счёт в банке и что для этого нужно
-                    </h2>
+                    <h2 class="result-item-big-card__title">{{ resultItem.resultTitle }}</h2>
                 </RouterLink>
 
-                <p class="result-item-big-card__text">
-                    Грузинские банки не открывают счета иностранцам, в том числе россиянам, удаленно. Единственное, что можно сделать, это подать с помощью доверенного представителя документы на открытие счета в Грузии, а также заполнить анкету KYC. Однако в случае одобрения, чтобы завершить процедуру, понадобиться личное присутствие заявителя в отделении банка в Грузии.
-                </p>
+                <p class="result-item-big-card__text">{{ resultItem.resultText }}</p>
             </div>
         </article>
 
@@ -33,13 +51,11 @@ import IconOpen from '@/components/Icons/Controls/IconOpen.vue'
 
             <RouterLink :to="{ name: 'article'}"
                         class="result-item-big-preview-card__title-link">
-                <h2 class="result-item-big-preview-card__title">
-                    В какой стране можно открыть счёт в банке и что для этого нужно
-                </h2>
+                <h2 class="result-item-big-preview-card__title">{{ resultItem.resultTitle }}</h2>
             </RouterLink>
 
             <p class="result-item-big-preview-card__text">
-                Грузинские банки не открывают счета иностранцам, в том числе россиянам, удаленно. Единственное, что можно сделать, это подать с помощью доверенного представителя документы на открытие счета в Грузии, а также заполнить анкету KYC. Однако в случае одобрения, чтобы завершить процедуру, понадобиться личное присутствие заявителя в отделении банка в Грузии.
+                {{ resultItem.resultText }}
                 <span class="result-item-big-preview-card__button-read-more">Читать подробнее</span>
             </p>
 
@@ -51,7 +67,7 @@ import IconOpen from '@/components/Icons/Controls/IconOpen.vue'
 
                 <div class="controls-buttons-group__button
                             controls-buttons-group__button--open">
-                    <IconOpen />
+                    <IconOpen @click="toggleResultItemPopup" />
                 </div>
             </div>
 
@@ -61,6 +77,12 @@ import IconOpen from '@/components/Icons/Controls/IconOpen.vue'
 
             <ArticleQuestionsSection />
         </article>
+
+        <ResultItemArticlePopup class="modal-window-fillin"
+                                :resultItem=resultItem
+                                v-if="isShowResultItemPopup"
+                                @close="cancel">
+        </ResultItemArticlePopup>
     </div>
 </template>
 
@@ -89,11 +111,15 @@ import IconOpen from '@/components/Icons/Controls/IconOpen.vue'
     }
 
     &__text {
+        margin: 0;
+        padding: 0;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
         font: 400 12px/1.4 'Roboto Mono';
         letter-spacing: -0.03em;
         color: rgba($color: #000000, $alpha: .6);
-        margin: 0;
-        padding: 0;
     }
 
     @media (max-width: 767px) {

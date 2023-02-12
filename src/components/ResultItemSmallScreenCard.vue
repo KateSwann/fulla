@@ -1,35 +1,53 @@
 <script setup>
+import { ref }  from 'vue'
+
 import ArticleSocialCard from './Article/ArticleSocialCard.vue'
 import IconCross from '@/components/Icons/Controls/IconCross.vue'
 import IconOpen from '@/components/Icons/Controls/IconOpen.vue'
+import ResultItemArticlePopup from '@/components/ResultItemArticlePopup.vue'
+
+let isShowResultItemPopup = ref(false);
+
+function toggleResultItemPopup() {
+    isShowResultItemPopup.value = !isShowResultItemPopup.value;
+}
+
+function cancel() {
+    isShowResultItemPopup.value = false;
+}
+
+const props = defineProps({
+    resultItem: {
+        resultTitle: String,
+        resultText: String,
+        resultDate: String,
+        resultTime: Number,
+    }
+});
 </script>
 
 <template>
     <article class="result-item-small-card">
         <div class="result-item-small-card__side-content">
-            <span class="result-item-small-card__date">14 Апр 2022,</span>
-            <span class="result-item-small-card__time">14:12</span>
+            <span class="result-item-small-card__date">{{ resultItem.resultDate }},</span>
+            <span class="result-item-small-card__time">{{ resultItem.resultTime }}</span>
         </div>
 
         <div class="result-item-small-card__main-content">
             <RouterLink :to="{ name: 'article'}"
                         class="result-item-small-card__title-link">
-                <h2 class="result-item-small-card__title">
-                    В какой стране можно открыть счёт в банке и что для этого нужно
-                </h2>
+                <h2 class="result-item-small-card__title">{{ resultItem.resultTitle }}</h2>
             </RouterLink>
 
             <p class="result-item-small-card__text-container">
-                <span class="result-item-small-card__text">
-                    Грузинские банки не открывают счета иностранцам, в том числе россиянам, удаленно. Единственное, что можно сделать, это подать с помощью доверенного представителя документы на открытие счета в Грузии, а также заполнить анкету KYC. Однако в случае одобрения, чтобы завершить процедуру, понадобиться личное присутствие заявителя в отделении банка в Грузии.
-                </span>
+                <span class="result-item-small-card__text">{{ resultItem.resultText }}</span>
                 <span class="result-item-small-card__button-read-more">Читать подробнее</span>
             </p>
 
             <div class="controls-buttons-group">
                 <div class="controls-buttons-group__button
                             controls-buttons-group__button--open">
-                    <IconOpen />
+                    <IconOpen @click="toggleResultItemPopup" />
                 </div>
 
                 <div class="controls-buttons-group__button
@@ -40,6 +58,12 @@ import IconOpen from '@/components/Icons/Controls/IconOpen.vue'
 
             <ArticleSocialCard />
         </div>
+
+        <ResultItemArticlePopup class="modal-window-fillin"
+                                :resultItem=resultItem
+                                v-if="isShowResultItemPopup"
+                                @close="cancel">
+        </ResultItemArticlePopup>
     </article>
 </template>
 
@@ -63,6 +87,7 @@ import IconOpen from '@/components/Icons/Controls/IconOpen.vue'
         }
 
         .result-item-small-card__text {
+            -webkit-line-clamp: 5;
             font: 400 16px/1.4 'Helvetica';
             letter-spacing: -0.02em;
         }
@@ -102,6 +127,10 @@ import IconOpen from '@/components/Icons/Controls/IconOpen.vue'
     }
 
     &__text {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
         font: 400 12px/1.4 'Roboto Mono';
         letter-spacing: -0.03em;
         color: rgba($color: #000000, $alpha: .6);
