@@ -20,10 +20,11 @@ function cancel() {
 
 const props = defineProps({
     resultItem: {
-        resultTitle: String,
-        resultText: String,
-        resultDate: String,
-        resultTime: Number,
+        id: Number,
+        title: String,
+        text: String,
+        date: String,
+        time: Number,
     }
 });
 </script>
@@ -32,30 +33,40 @@ const props = defineProps({
     <div class="result-item-big-card-container">
         <article class="result-item-big-card">
             <div class="result-item-big-card__side-content">
-                <span class="result-item-big-card__date">{{ resultItem.resultDate }},</span>
-                <span class="result-item-big-card__time">{{ resultItem.resultTime }}</span>
+                <span class="result-item-big-card__date">{{ resultItem.date }},</span>
+                <span class="result-item-big-card__time">{{ resultItem.time }}</span>
             </div>
 
             <div class="result-item-big-card__main-content">
-                <RouterLink :to="{ name: 'article'}"
+                <RouterLink :to="{
+                                name: 'article',
+                                params: {
+                                    resultItemId: resultItem.id,
+                                },
+                            }"
                             class="result-item-big-card__title-link">
-                    <h2 class="result-item-big-card__title">{{ resultItem.resultTitle }}</h2>
+                    <h2 class="result-item-big-card__title">{{ resultItem.title }}</h2>
                 </RouterLink>
 
-                <p class="result-item-big-card__text">{{ resultItem.resultText }}</p>
+                <p class="result-item-big-card__text">{{ resultItem.text }}</p>
             </div>
         </article>
 
         <article class="result-item-big-preview-card">
             <ArticleLabelsList />
 
-            <RouterLink :to="{ name: 'article'}"
+            <RouterLink :to="{
+                                name: 'article',
+                                params: {
+                                    resultItemId: resultItem.id,
+                                },
+                            }"
                         class="result-item-big-preview-card__title-link">
-                <h2 class="result-item-big-preview-card__title">{{ resultItem.resultTitle }}</h2>
+                <h2 class="result-item-big-preview-card__title">{{ resultItem.title }}</h2>
             </RouterLink>
 
             <p class="result-item-big-preview-card__text">
-                {{ resultItem.resultText }}
+                {{ resultItem.text }}
                 <span class="result-item-big-preview-card__button-read-more">Читать подробнее</span>
             </p>
 

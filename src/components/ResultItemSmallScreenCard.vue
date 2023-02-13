@@ -18,10 +18,11 @@ function cancel() {
 
 const props = defineProps({
     resultItem: {
-        resultTitle: String,
-        resultText: String,
-        resultDate: String,
-        resultTime: Number,
+        id: Number,
+        title: String,
+        text: String,
+        date: String,
+        time: Number,
     }
 });
 </script>
@@ -29,18 +30,23 @@ const props = defineProps({
 <template>
     <article class="result-item-small-card">
         <div class="result-item-small-card__side-content">
-            <span class="result-item-small-card__date">{{ resultItem.resultDate }},</span>
-            <span class="result-item-small-card__time">{{ resultItem.resultTime }}</span>
+            <span class="result-item-small-card__date">{{ resultItem.date }},</span>
+            <span class="result-item-small-card__time">{{ resultItem.time }}</span>
         </div>
 
         <div class="result-item-small-card__main-content">
-            <RouterLink :to="{ name: 'article'}"
-                        class="result-item-small-card__title-link">
-                <h2 class="result-item-small-card__title">{{ resultItem.resultTitle }}</h2>
+            <RouterLink :to="{
+                            name: 'article',
+                            params: {
+                                resultItemId: resultItem.id,
+                            },
+                        }"
+                    class="result-item-small-card__title-link">
+                <h2 class="result-item-small-card__title">{{ resultItem.title }}</h2>
             </RouterLink>
 
             <p class="result-item-small-card__text-container">
-                <span class="result-item-small-card__text">{{ resultItem.resultText }}</span>
+                <span class="result-item-small-card__text">{{ resultItem.text }}</span>
                 <span class="result-item-small-card__button-read-more">Читать подробнее</span>
             </p>
 

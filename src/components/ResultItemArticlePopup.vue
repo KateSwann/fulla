@@ -12,10 +12,11 @@ const cancel = () => {
 
 const props = defineProps({
     resultItem: {
-        resultTitle: String,
-        resultText: String,
-        resultDate: String,
-        resultTime: Number,
+        id: Number,
+        title: String,
+        text: String,
+        date: String,
+        time: Number,
     }
 });
 </script>
@@ -27,16 +28,26 @@ const props = defineProps({
             <article class="modal-result-item-article">
                 <ArticleLabelsList class="modal-result-item-article__article-labels-list" />
 
-                <RouterLink :to="{ name: 'article'}"
+                <RouterLink :to="{
+                                name: 'article',
+                                params: {
+                                    resultItemId: resultItem.id,
+                                },
+                            }"
                             class="modal-result-item-article__title-link">
-                    <h2 class="modal-result-item-article__title">{{ resultItem.resultTitle }}</h2>
+                    <h2 class="modal-result-item-article__title">{{ resultItem.title }}</h2>
                 </RouterLink>
 
                 <p class="modal-result-item-article__text">
-                    {{ resultItem.resultText }}
+                    {{ resultItem.text }}
                 </p>
 
-                <RouterLink :to="{ name: 'article'}"
+                <RouterLink :to="{
+                                name: 'article',
+                                params: {
+                                    resultItemId: resultItem.id,
+                                },
+                            }"
                              class="modal-result-item-article__button-read-more">
                     Читать подробнее
                 </RouterLink>
@@ -98,7 +109,7 @@ const props = defineProps({
         }
 
         &__title {
-            margin-bottom: 8px;
+            margin-bottom: 18px;
         }
 
         &__text {

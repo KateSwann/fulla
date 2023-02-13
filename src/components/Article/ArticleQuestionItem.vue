@@ -5,31 +5,31 @@ import ArticleReplyItem from '@/components/Article/ArticleReplyItem.vue'
 
 const testRepliesListData = [
     {
-        replyDateTime: '14 Апр 2022, 18:44',
-        replyText: 'Все равно. Банк интересует чтобы у клиента был источник дохода.У меня договор на консультационные услуги с фирмой в USA.',
-        replyAuthorName: 'Anna Na****',
-        replyRating: 17,
-        replyReplies: [],
+        dateTime: '14 Апр 2022, 18:44',
+        text: 'Все равно. Банк интересует чтобы у клиента был источник дохода.У меня договор на консультационные услуги с фирмой в USA.',
+        authorName: 'Anna Na****',
+        rating: 17,
+        replies: [],
     },
     {
-        replyDateTime: '14 Апр 2022, 18:44',
-        replyText: 'Карта на 4 года, от 3-х дней для именной карты, от 2-х для неименной.',
-        replyAuthorName: 'Vikk****',
-        replyRating: 0,
-        replyReplies: [
+        dateTime: '14 Апр 2022, 18:44',
+        text: 'Карта на 4 года, от 3-х дней для именной карты, от 2-х для неименной.',
+        authorName: 'Vikk****',
+        rating: 0,
+        replies: [
             {
-                replyDateTime: '14 Апр 2022, 18:44',
-                replyText: 'для открытия потребовали Грузинский номер, но затем можно перепривязать на российский. Почему сразу на него не открыть непонятно - мб тетки в офисе просто не в курсе.',
-                replyAuthorName: 'Mnchest****',
-                replyRating: 5,
-                replyReplies: [],
+                dateTime: '14 Апр 2022, 18:44',
+                text: 'для открытия потребовали Грузинский номер, но затем можно перепривязать на российский. Почему сразу на него не открыть непонятно - мб тетки в офисе просто не в курсе.',
+                authorName: 'Mnchest****',
+                rating: 5,
+                replies: [],
             },
             {
-                replyDateTime: '14 Апр 2022, 18:44',
-                replyText: 'Что касается "зачем" - если вам не нужно, то и вопроса нет.',
-                replyAuthorName: 'Looll****',
-                replyRating: 199,
-                replyReplies: [],
+                dateTime: '14 Апр 2022, 18:44',
+                text: 'Что касается "зачем" - если вам не нужно, то и вопроса нет.',
+                authorName: 'Looll****',
+                rating: 199,
+                replies: [],
             }
         ]
     },
@@ -69,7 +69,7 @@ function toggleQuestionRepliesDisplay() {
 <style lang="scss">
 .article-question-item {
     &__title {
-        margin-bottom: 8px;
+        margin-bottom: 18px;
         font: 700 20px/1.12 'Helvetica';
         letter-spacing: -0.05em;
     }

@@ -3,11 +3,11 @@ import IconSocialTg from '@/components/Icons/Social/IconSocialTg.vue'
 
 const props = defineProps({
     replyItem: {
-        replyDateTime: String,
-        replyText: String,
-        replyAuthorName: String,
-        replyRating: Number,
-        replyReplies: Array,
+        dateTime: String,
+        text: String,
+        authorName: String,
+        rating: Number,
+        replies: Array,
     }
 });
 </script>
@@ -15,16 +15,16 @@ const props = defineProps({
 <template>
     <div class="question-reply">
         <div class="question-reply__body">
-            <span class="question-reply__time">{{ replyItem.replyDateTime }}</span>
+            <span class="question-reply__time">{{ replyItem.dateTime }}</span>
 
-            <p class="question-reply__text">{{ replyItem.replyText }}</p>
+            <p class="question-reply__text">{{ replyItem.text }}</p>
 
             <div class="question-reply__info-block">
                 <span class="question-reply__social-network-icon">
                     <IconSocialTg />
                 </span>
 
-                <span class="question-reply__author-name">{{ replyItem.replyAuthorName }}</span>
+                <span class="question-reply__author-name">{{ replyItem.authorName }}</span>
             </div>
 
             <div class="rating-controls">
@@ -33,7 +33,7 @@ const props = defineProps({
                     class="rating-controls__button"
                     data-reply-rating-for="reply-rating">
 
-                <span class="rating-controls__counter">{{ replyItem.replyRating }}</span>
+                <span class="rating-controls__counter">{{ replyItem.rating }}</span>
 
                 <input type="button"
                     value="+"
@@ -42,8 +42,8 @@ const props = defineProps({
             </div>
         </div>
 
-        <template v-if="replyItem.replyReplies.length">
-            <template v-for="(replyItem, index) in replyItem.replyReplies"
+        <template v-if="replyItem.replies.length">
+            <template v-for="(replyItem, index) in replyItem.replies"
                       :key="index">
                 <ArticleReplyItem class="article-question-item__reply-item"
                                   :replyItem=replyItem
@@ -70,7 +70,7 @@ const props = defineProps({
     }
 
     &__text {
-        margin-bottom: 8px;
+        margin-bottom: 18px;
         font: 400 16px/1.4 'Roboto Mono';
         letter-spacing: -0.04em;
     }

@@ -16,7 +16,7 @@ const router = createRouter({
                     meta: { title: 'Searcb page' },
                 },
                 {
-                path: '/article',
+                path: 'article/:resultItemId',
                 name: 'article',
                 // route level code-splitting
                 // this generates a separate chunk (About.[hash].js) for this route
