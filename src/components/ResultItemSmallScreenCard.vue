@@ -47,7 +47,16 @@ const props = defineProps({
 
             <p class="result-item-small-card__text-container">
                 <span class="result-item-small-card__text">{{ resultItem.text }}</span>
-                <span class="result-item-small-card__button-read-more">Читать подробнее</span>
+
+                <RouterLink :to="{
+                                name: 'article',
+                                params: {
+                                    resultItemId: resultItem.id,
+                                },
+                            }"
+                        class="result-item-small-card__button-read-more">
+                    Читать подробнее
+                </RouterLink>
             </p>
 
             <div class="controls-buttons-group">
@@ -83,33 +92,8 @@ const props = defineProps({
         background-color: var(--background-color-50);
     }
 
-    &:hover,
-    &--selected {
-        .result-item-small-card__title-link {
-            margin-right: 112px;
-        }
-
-        .result-item-small-card__title {
-            margin-bottom: 16px;
-        }
-
-        .result-item-small-card__text {
-            -webkit-line-clamp: 5;
-            font: 400 16px/1.4 'Helvetica';
-            letter-spacing: -0.02em;
-        }
-
-        .result-item-small-card__button-read-more {
-            display: inline-block;
-        }
-
-        .result-item-small-card__article-social-network-card {
-            display: flex;
-        }
-
-        .controls-buttons-group {
-            display: flex;
-        }
+    .result-item-small-card__article-social-network-card {
+        display: none;
     }
 
     &__side-content {
@@ -147,11 +131,8 @@ const props = defineProps({
         display: none;
         font-weight: 700;
         border-bottom: 1px solid;
+        color: var(--text-color-regular);
         cursor: pointer;
-    }
-
-    .result-item-small-card__article-social-network-card {
-        display: none;
     }
 
     .controls-buttons-group {
@@ -184,6 +165,36 @@ const props = defineProps({
                     stroke: var(--text-color-regular);
                 }
             }
+        }
+    }
+
+    &--active {
+        background-color: var(--background-color-50);
+
+        .result-item-small-card__title-link {
+            margin-right: 112px;
+        }
+
+        .result-item-small-card__title {
+            margin-bottom: 16px;
+        }
+
+        .result-item-small-card__text {
+            -webkit-line-clamp: 5;
+            font: 400 16px/1.4 'Helvetica';
+            letter-spacing: -0.02em;
+        }
+
+        .result-item-small-card__button-read-more {
+            display: inline-block;
+        }
+
+        .result-item-small-card__article-social-network-card {
+            display: flex;
+        }
+
+        .controls-buttons-group {
+            display: flex;
         }
     }
 

@@ -179,8 +179,6 @@ const props = defineProps({
     }
 
     @media (min-width: 768px) {
-        padding: 47px;
-
         &__article-labels-list {
             margin-top: 44px;
         }

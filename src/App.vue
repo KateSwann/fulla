@@ -31,6 +31,18 @@ body {
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+
+    @media (max-width: 767px) {
+        padding-top: 90px;
+    }
+
+    @media (min-width: 768px) and (max-width: 1439px) {
+        padding-top: 140px;
+    }
+
+    @media (min-width: 1440px) {
+        padding-top: 108px;
+    }
 }
 
 ul {

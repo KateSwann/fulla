@@ -1,4 +1,5 @@
 <script setup>
+import { ref, onBeforeMount }  from 'vue'
 import { useScreen, useGrid } from 'vue-screen'
 
 import ResultItemBigScreenCard from '@/components/ResultItemBigScreenCard.vue'
@@ -79,6 +80,20 @@ const testSearchResultsListData = [
         time: '16:48',
     },
 ]
+let modifiedSearchResultsList = ref();
+
+onBeforeMount(() => {
+    modifySearchResults();
+});
+
+function modifySearchResults() {
+    modifiedSearchResultsList.value = testSearchResultsListData.map(i => ({...i, isActive: false}));
+}
+
+function toggleResultItemOpen(item) {
+    modifiedSearchResultsList.value.map(i => i.isActive = false);
+    item.isActive = !item.isActive;
+}
 </script>
 
 <template>
@@ -87,7 +102,7 @@ const testSearchResultsListData = [
         <div class="search-view__content"
              v-show="grid.isMobile">
 
-            <template v-for="(resultItem, index) in testSearchResultsListData"
+            <template v-for="(resultItem, index) in modifiedSearchResultsList"
                       :key="index">
                 <ResultItemSmallScreenCard :resultItem=resultItem>
                 </ResultItemSmallScreenCard>
@@ -98,9 +113,12 @@ const testSearchResultsListData = [
         <!-- START Содержание контента - tablet -->
         <div class="search-view__content"
              v-show="grid.isTablet">
-            <template v-for="(resultItem, index) in testSearchResultsListData"
+            <template v-for="(resultItem, index) in modifiedSearchResultsList"
                       :key="index">
-                <ResultItemSmallScreenCard :resultItem=resultItem>
+                <ResultItemSmallScreenCard
+                    @click="toggleResultItemOpen(resultItem)"
+                    :class="{ 'result-item-small-card--active': resultItem.isActive }"
+                    :resultItem=resultItem>
                 </ResultItemSmallScreenCard>
             </template>
         </div>
@@ -110,7 +128,7 @@ const testSearchResultsListData = [
         <div class="search-view__content"
              v-show="grid.isDesktop">
             <div class="search-view__left-column">
-                <template v-for="(resultItem, index) in testSearchResultsListData"
+                <template v-for="(resultItem, index) in modifiedSearchResultsList"
                         :key="index">
                     <ResultItemBigScreenCard :resultItem=resultItem>
                     </ResultItemBigScreenCard>
@@ -133,12 +151,6 @@ const testSearchResultsListData = [
 
 <style lang="scss">
 .search-view {
-    &__content {}
-
-    @media (max-width: 767px) {
-        &__content {}
-    }
-
     @media (min-width: 768px) and (max-width: 1439px) {
         &__content {
             max-width: 728px;
@@ -148,16 +160,9 @@ const testSearchResultsListData = [
     }
 
     @media (min-width: 1440px) {
-        $header-hight: 108px;
-
-        &__header-wrapper {
-            height: $header-hight;
-        }
-
         &__content {
             max-width: 1320px;
             margin: 0 auto;
-            padding-top: $header-hight;
             display: flex;
         }
 
