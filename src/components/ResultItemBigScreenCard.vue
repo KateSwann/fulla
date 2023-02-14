@@ -18,6 +18,12 @@ function cancel() {
     isShowResultItemPopup.value = false;
 }
 
+const emit = defineEmits(['closeResultItem'])
+
+const closeResultItem = () => {
+    emit('closeResultItem')
+}
+
 const props = defineProps({
     resultItem: {
         id: Number,
@@ -72,7 +78,8 @@ const props = defineProps({
 
             <div class="controls-buttons-group">
                 <div class="controls-buttons-group__button
-                            controls-buttons-group__button--close">
+                            controls-buttons-group__button--close"
+                            @click.stop.prevent="closeResultItem">
                     <IconCross />
                 </div>
 
@@ -276,8 +283,7 @@ const props = defineProps({
 }
 
 .result-item-big-card-container {
-    &:hover,
-    &--selected {
+    &--active {
         .result-item-big-preview-card {
             display: block;
         }

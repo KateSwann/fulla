@@ -12,6 +12,7 @@ const grid = useGrid({
     lg: 1440,
     isMobile: grid => grid.sm && !grid.md,
     isTablet: grid => grid.md && !grid.lg,
+    isMobileAndTablet: grid => grid.sm && !grid.lg,
     isDesktop: grid => grid.lg,
 })
 
@@ -104,23 +105,7 @@ function toggleResultItemOpen(item) {
     <main class="search-view">
         <!-- START Содержание контента - mobile -->
         <div class="search-view__content"
-             v-show="grid.isMobile">
-
-            <template v-for="(resultItem, index) in modifiedSearchResultsList"
-                      :key="index">
-                <ResultItemSmallScreenCard
-                    @click="toggleResultItemOpen(resultItem)"
-                    :class="{ 'result-item-small-card--active': resultItem.isActive }"
-                    :resultItem=resultItem
-                    @close-result-item="closeAllResultItems">
-                </ResultItemSmallScreenCard>
-            </template>
-        </div>
-        <!-- END Содержание контента - mobile -->
-
-        <!-- START Содержание контента - tablet -->
-        <div class="search-view__content"
-             v-show="grid.isTablet">
+             v-show="grid.isMobileAndTablet">
             <template v-for="(resultItem, index) in modifiedSearchResultsList"
                       :key="index">
                 <ResultItemSmallScreenCard
@@ -139,7 +124,11 @@ function toggleResultItemOpen(item) {
             <div class="search-view__left-column">
                 <template v-for="(resultItem, index) in modifiedSearchResultsList"
                         :key="index">
-                    <ResultItemBigScreenCard :resultItem=resultItem>
+                    <ResultItemBigScreenCard
+                        @click="toggleResultItemOpen(resultItem)"
+                        :class="{ 'result-item-big-card-container--active': resultItem.isActive }"
+                        :resultItem=resultItem
+                        @close-result-item="closeAllResultItems">
                     </ResultItemBigScreenCard>
                 </template>
             </div>
