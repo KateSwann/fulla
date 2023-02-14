@@ -89,6 +89,7 @@ const props = defineProps({
         display: inline-flex;
         align-self: center;
         font-weight: 700;
+        line-height: 1.4;
         color: var(--text-color-regular);
         border-bottom: 1px solid;
         cursor: pointer;

@@ -90,8 +90,12 @@ function modifySearchResults() {
     modifiedSearchResultsList.value = testSearchResultsListData.map(i => ({...i, isActive: false}));
 }
 
-function toggleResultItemOpen(item) {
+function closeAllResultItems() {
     modifiedSearchResultsList.value.map(i => i.isActive = false);
+}
+
+function toggleResultItemOpen(item) {
+    closeAllResultItems();
     item.isActive = !item.isActive;
 }
 </script>
@@ -104,7 +108,11 @@ function toggleResultItemOpen(item) {
 
             <template v-for="(resultItem, index) in modifiedSearchResultsList"
                       :key="index">
-                <ResultItemSmallScreenCard :resultItem=resultItem>
+                <ResultItemSmallScreenCard
+                    @click="toggleResultItemOpen(resultItem)"
+                    :class="{ 'result-item-small-card--active': resultItem.isActive }"
+                    :resultItem=resultItem
+                    @close-result-item="closeAllResultItems">
                 </ResultItemSmallScreenCard>
             </template>
         </div>
@@ -118,7 +126,8 @@ function toggleResultItemOpen(item) {
                 <ResultItemSmallScreenCard
                     @click="toggleResultItemOpen(resultItem)"
                     :class="{ 'result-item-small-card--active': resultItem.isActive }"
-                    :resultItem=resultItem>
+                    :resultItem=resultItem
+                    @close-result-item="closeAllResultItems">
                 </ResultItemSmallScreenCard>
             </template>
         </div>

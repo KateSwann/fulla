@@ -16,6 +16,12 @@ function cancel() {
     isShowResultItemPopup.value = false;
 }
 
+const emit = defineEmits(['closeResultItem'])
+
+const closeResultItem = () => {
+    emit('closeResultItem')
+}
+
 const props = defineProps({
     resultItem: {
         id: Number,
@@ -67,7 +73,8 @@ const props = defineProps({
                 </div>
 
                 <div class="controls-buttons-group__button
-                            controls-buttons-group__button--close">
+                            controls-buttons-group__button--close"
+                            @click.stop.prevent="closeResultItem">
                     <IconCross />
                 </div>
             </div>
@@ -78,7 +85,7 @@ const props = defineProps({
         <ResultItemArticlePopup class="modal-window-fillin"
                                 :resultItem=resultItem
                                 v-if="isShowResultItemPopup"
-                                @close="cancel">
+                                @close="cancel(resultItem.id)">
         </ResultItemArticlePopup>
     </article>
 </template>
@@ -130,6 +137,7 @@ const props = defineProps({
     &__button-read-more {
         display: none;
         font-weight: 700;
+        line-height: 1.4;
         border-bottom: 1px solid;
         color: var(--text-color-regular);
         cursor: pointer;

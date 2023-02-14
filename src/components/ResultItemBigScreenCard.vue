@@ -200,6 +200,7 @@ const props = defineProps({
 
     &__button-read-more {
         font-weight: 700;
+        line-height: 1.4;
         border-bottom: 1px solid;
         cursor: pointer;
     }
