@@ -1,10 +1,17 @@
 <script setup>
 import { ref }  from 'vue'
 
+import IconCross from '@/components/Icons/Controls/IconCross.vue'
+
+let searchField = ref("");
 let isLogoBig = ref(false);
 
 function toggleHeaderIconSize() {
     isLogoBig.value = !isLogoBig.value;
+}
+
+function clearSearchField() {
+    searchField.value = "";
 }
 </script>
 
@@ -14,7 +21,24 @@ function toggleHeaderIconSize() {
              :class="{ 'header-animated-logo--opened': isLogoBig }"
              @click="toggleHeaderIconSize">
             <div class="header-animated-logo__prefix"></div>
-            <div class="header-animated-logo__stretch-line"></div>
+            <div class="header-animated-logo__stretch-line">
+                <div class="search-box">
+                    <input
+                        v-model.trim="searchField"
+                        class="search-box__input"
+                        :class="{ 'search-box__input--empty': !searchField }"
+                        type="search"
+                        name="q"
+                        autocomplete="off"
+                        placeholder="Поиск..."
+                    />
+
+                    <span class="search-box__button-clear"
+                          @click="clearSearchField">
+                        <IconCross />
+                    </span>
+                </div>
+            </div>
             <div class="header-animated-logo__postfix"></div>
         </div>
     </header>
@@ -80,10 +104,10 @@ function toggleHeaderIconSize() {
 
         &--opened {
             .header-animated-logo__stretch-line {
-                animation: logoHalfWidthStretch, logoFullWidthStretch;
-                animation-duration: .7s, .85s;
-                animation-delay: 0s, 1.7s;
-                animation-fill-mode: forwards, forwards;
+                // animation: logoHalfWidthStretch, logoFullWidthStretch;
+                // animation-duration: .7s, .85s;
+                // animation-delay: 0s, 1.7s;
+                // animation-fill-mode: forwards, forwards;
             }
         }
 
@@ -108,6 +132,9 @@ function toggleHeaderIconSize() {
             position: relative;
             transform-origin: center;
 
+            // temporary rule
+            width: $logo-full-width;
+
             &::before,
             &::after {
                 content: '';
@@ -127,16 +154,106 @@ function toggleHeaderIconSize() {
         }
     }
 
+    @keyframes movingSearchTopToBottom {
+        from {
+            bottom: 40px;
+            opacity: 0;
+        }
+
+        50% {
+            opacity: .35;
+        }
+
+        to {
+            opacity: 1;
+            bottom: 9px;
+        }
+    }
+
+    .search-box {
+        height: 48px;
+        position: absolute;
+        bottom: 9px;
+        left: 5px;
+        right: -4px;
+        display: flex;
+        flex-direction: row-reverse;
+        align-items: flex-end;
+        font: 400 14px/1.4 'Helvetica';
+        letter-spacing: -0.02em;
+        // animation: movingSearchTopToBottom .85s forwards;
+
+        &__input {
+            flex: 1;
+            height: 20px;
+            min-width: 20px;
+            padding: 0;
+            -webkit-mask-image: linear-gradient(90deg, #000 10%, #000 calc(100% - 240px),  transparent);
+            mask-image: linear-gradient(90deg, #000 10%, #000 calc(100% - 240px),  transparent);
+
+            &:focus {
+                -webkit-mask-image: none;
+                mask-image: none;
+                margin-right: 10px;
+            }
+
+            &--empty {
+                margin-left: 9px;
+                box-shadow: inset 1px 0 0 0 black;
+
+                & + .search-box__button-clear {
+                    display: none;
+                }
+            }
+        }
+
+        &__button-clear {
+            cursor: pointer;
+        }
+    }
+
     @media (max-width: 767px) {
         height: 90px;
+
+        .search-box {
+            &__input {
+                &--empty {
+                }
+            }
+
+            &__button-clear {
+                margin: 0 4.8px 0 3px
+            }
+        }
     }
 
     @media (min-width: 768px) and (max-width: 1439px) {
         height: 140px;
+
+        .search-box {
+            &__input {
+                &--empty {
+                }
+            }
+
+            &__button-clear {
+                margin: 0 10.8px 0 7px;
+            }
+        }
     }
 
     @media (min-width: 1440px) {
         height: 108px;
+
+        .search-box {
+            &__input {
+                &--empty {}
+            }
+
+            &__button-clear {
+                margin: 0 10.8px 0 8px;
+            }
+        }
     }
 }
 </style>
