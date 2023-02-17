@@ -1,10 +1,68 @@
 <script setup>
 import { ref }  from 'vue'
+import { onBeforeRouteUpdate } from "vue-router";
+import { useGrid } from 'vue-screen'
 
 import IconCross from '@/components/Icons/Controls/IconCross.vue'
 
+const grid = useGrid({
+    sm: 0,
+    md: 768,
+    lg: 1440,
+    isMobile: grid => grid.sm && !grid.md,
+    isTablet: grid => grid.md && !grid.lg,
+    isDesktop: grid => grid.lg,
+})
+
 let searchField = ref("");
 let isLogoBig = ref(false);
+let isSearchOverlayOpen = ref(false);
+let searchSuggestionsListTestData = ref([
+    {
+        id: 1,
+        title: 'yandex practicum кому сейчас принадлежит',
+        isVisible: true,
+    },
+    {
+        id: 2,
+        title: 'Куда проще всего переехать без оформления визы',
+        isVisible: true,
+    },
+    {
+        id: 3,
+        title: 'гриша коченов',
+        isVisible: true,
+    },
+    {
+        id: 4,
+        title: 'оформление ИП в Грузии через дом юстиций',
+        isVisible: true,
+    },
+    {
+        id: 5,
+        title: 'yandex practicum кому сейчас принадлежит',
+        isVisible: true,
+    },
+    {
+        id: 6,
+        title: 'Куда проще всего переехать без оформления визы',
+        isVisible: true,
+    },
+    {
+        id: 7,
+        title: 'гриша коченов',
+        isVisible: true,
+    },
+    {
+        id: 8,
+        title: 'оформление ИП в Грузии через дом юстиций',
+        isVisible: true,
+    },
+])
+
+onBeforeRouteUpdate(async () => {
+    isSearchOverlayOpen.value = await false;
+})
 
 function toggleHeaderIconSize() {
     isLogoBig.value = !isLogoBig.value;
@@ -13,6 +71,15 @@ function toggleHeaderIconSize() {
 function clearSearchField() {
     searchField.value = "";
 }
+
+function toggleSearchOverlay() {
+    isSearchOverlayOpen.value = !isSearchOverlayOpen.value;
+}
+
+function clearSearchSuggestion(id) {
+    const saggestionItem = searchSuggestionsListTestData.value.find(el => el.id === id);
+    saggestionItem.isVisible = false;
+}
 </script>
 
 <template>
@@ -20,9 +87,36 @@ function clearSearchField() {
         <div class="header-animated-logo"
              :class="{ 'header-animated-logo--opened': isLogoBig }"
              @click="toggleHeaderIconSize">
-            <div class="header-animated-logo__prefix"></div>
+            <RouterLink :to="{ name: 'search' }"
+                        class="header-animated-logo__prefix"></RouterLink>
             <div class="header-animated-logo__stretch-line">
-                <div class="search-box">
+                <div class="header-animated-logo__search-box
+                            search-box">
+                    <input
+                        v-model.trim="searchField"
+                        class="search-box__input"
+                        :class="{ 'search-box__input--empty': !searchField }"
+                        type="search"
+                        name="q"
+                        autocomplete="off"
+                        placeholder="Поиск..."
+                        @click="grid.isMobile ? toggleSearchOverlay() : null"
+                    />
+
+                    <span class="search-box__button-clear"
+                          @click="clearSearchField">
+                        <IconCross />
+                    </span>
+                </div>
+            </div>
+            <div class="header-animated-logo__postfix"></div>
+        </div>
+
+        <section class="search-overlay-box"
+             v-show="isSearchOverlayOpen">
+            <div class="search-overlay-box__content">
+                <div class="search-overlay-box__search-box
+                            search-box">
                     <input
                         v-model.trim="searchField"
                         class="search-box__input"
@@ -38,9 +132,36 @@ function clearSearchField() {
                         <IconCross />
                     </span>
                 </div>
+
+                <ul class="search-overlay-box__search-suggestion-list
+                           search-suggestion-list">
+                    <template v-for="(suggestion, index) in searchSuggestionsListTestData"
+                              :key="index">
+                        <li class="search-suggestion-list__item
+                                   search-suggestion-list-item"
+                            v-show="suggestion.isVisible">
+                            <RouterLink :to="{
+                                            name: 'article',
+                                            params: { resultItemId: 1 },
+                                         }"
+                                        class="search-suggestion-list-item__text">
+                                {{ suggestion.title }}
+                            </RouterLink>
+
+                            <div class="search-suggestion-list-item__button-clear"
+                                  @click="clearSearchSuggestion(suggestion.id)">
+                                <IconCross />
+                            </div>
+                        </li>
+                    </template>
+                </ul>
             </div>
-            <div class="header-animated-logo__postfix"></div>
-        </div>
+
+            <div class="search-overlay-box__button-close"
+                 @click="toggleSearchOverlay">
+                <IconCross />
+            </div>
+        </section>
     </header>
 </template>
 
@@ -100,6 +221,13 @@ function clearSearchField() {
             to {
                 width: $logo-full-width;
             }
+        }
+
+        &__search-box {
+            position: absolute;
+            bottom: 9px;
+            left: 5px;
+            right: -4px;
         }
 
         &--opened {
@@ -172,10 +300,6 @@ function clearSearchField() {
 
     .search-box {
         height: 48px;
-        position: absolute;
-        bottom: 9px;
-        left: 5px;
-        right: -4px;
         display: flex;
         flex-direction: row-reverse;
         align-items: flex-end;
@@ -208,6 +332,86 @@ function clearSearchField() {
         }
 
         &__button-clear {
+            cursor: pointer;
+        }
+    }
+
+    .search-overlay-box {
+        padding: 40px 0 20px;
+        position: fixed;
+        left: 0;
+        right: 0;
+        top: 0;
+        bottom: 0;
+        background-color: var(--background-color-0);
+        overflow: hidden;
+
+        &__content {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        &__button-close {
+            position: absolute;
+            right: 25px;
+            top: 25px;
+            cursor: pointer;
+        }
+
+        &__search-box {
+            padding: 10px 0 13px;
+            margin: 0 20px 28px;
+            flex: 0;
+            border-bottom: 1px solid rgba($color: #000000, $alpha: .1);
+
+            .search-box__input--empty {
+                margin-left: 0;
+            }
+        }
+
+        &__search-suggestion-list {
+            flex: 1;
+            overflow-y: auto;
+        }
+    }
+
+    .search-suggestion-list {
+        padding: 0 20px;
+        display: flex;
+        flex-direction: column;
+
+        &__item {
+            &:not(:last-child) {
+                margin-bottom: 20px;
+            }
+        }
+    }
+
+    .search-suggestion-list-item {
+        display: flex;
+        align-items: center;
+
+        &::before {
+            content: "";
+            width: 16px;
+            height: 16px;
+            margin: 0 26px 0 20px;
+            opacity: .1;
+            background-image: url("data:image/svg+xml,%3Csvg width='16' height='16' viewBox='0 0 16 16' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M8 0C3.6 0 0 3.6 0 8C0 12.4 3.6 16 8 16C12.4 16 16 12.4 16 8C16 3.6 12.4 0 8 0ZM11.44 10.56L7.2 8.24V4H8.4V7.52L12 9.52L11.44 10.56V10.56Z' fill='black'/%3E%3C/svg%3E%0A");
+        }
+
+        &__text {
+            flex: 1;
+            font: 700 14px/1.4 'Helvetica';
+            letter-spacing: -0.02em;
+            color: var(--text-color-regular);
+        }
+
+        &__button-clear {
+            margin-left: 18px;
+            padding: 5px;
             cursor: pointer;
         }
     }
