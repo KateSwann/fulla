@@ -5,12 +5,17 @@ const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
+         path: '/',
+         component: () => import('../views/LoaderView.vue'),
+         meta: { title: 'Fulla' },
+        },
+        {
             path: '/',
             name: 'public',
             component: PublicView,
             children: [
                 {
-                    path: '/',
+                    path: 'search',
                     name: 'search',
                     component: () => import('../views/SearchView.vue'),
                     meta: { title: 'Поиск' },

@@ -1,0 +1,142 @@
+<script setup>
+import HeaderItem from '@/components/HeaderItem.vue'
+</script>
+
+<template>
+    <div class="loader-view">
+        <HeaderItem />
+    </div>
+</template>
+
+<style lang="scss">
+$logo-prefix-width: 23px;
+$logo-prefix-margin: 2px;
+$logo-postfix-width: 41px;
+$logo-postfix-margin: 4px;
+$logo-full-width: calc(
+                        100vw -
+                        (var(--logo-side-padding) * 2) -
+                        $logo-prefix-width -
+                        $logo-postfix-width -
+                        $logo-prefix-margin -
+                        $logo-postfix-margin
+                    );
+$logo-half-width: calc(($logo-full-width - 20px) / 2.5);
+$logo-start-width: $logo-half-width;
+
+@keyframes movingSearchTopToBottom {
+    from {
+        bottom: 40px;
+        opacity: 0;
+    }
+
+    50% {
+        opacity: .35;
+    }
+
+    to {
+        opacity: 1;
+        bottom: 9px;
+    }
+}
+
+@keyframes logoHalfWidthStretch {
+    from {
+        width: 40px;
+    }
+
+    70% {
+        width: calc($logo-half-width + 15px);
+    }
+
+    to {
+        width: $logo-half-width;
+    }
+}
+
+@keyframes logoFullWidthStretch {
+    from {
+        width: $logo-start-width;
+    }
+
+    70% {
+        width: calc($logo-full-width + 15px);
+    }
+
+    to {
+        width: $logo-full-width;
+    }
+}
+
+.loader-view {
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    .header {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: gold;
+
+        .search-box {
+            opacity: 0;
+        }
+    }
+
+    .search-overlay-box {
+        display: none;
+    }
+
+    @media (max-width: 767px) {
+        $logo-start-width: 20px;
+        --logo-side-padding: 20px;
+
+        .header {
+            .search-box {
+                animation: .85s movingSearchTopToBottom 1.1s forwards;
+            }
+
+            .header-animated-logo__stretch-line {
+                animation: 0.9s logoFullWidthStretch forwards;
+            }
+        }
+    }
+
+    @media (min-width: 768px) and (max-width: 1439px) {
+        $logo-start-width: 60px;
+        --logo-side-padding: 60px;
+
+        .header {
+            .search-box {
+                animation: .85s movingSearchTopToBottom 1.1s forwards;
+            }
+
+            .header-animated-logo__stretch-line {
+                animation: 0.9s logoFullWidthStretch forwards;
+            }
+        }
+    }
+
+    @media (min-width: 1440px) {
+        --logo-side-padding: 60px;
+
+        .header {
+            .search-box {
+                animation: .85s movingSearchTopToBottom 2.4s forwards;
+            }
+
+            .header-animated-logo__stretch-line {
+                animation: logoHalfWidthStretch, logoFullWidthStretch;
+                animation-duration: .7s, .85s;
+                animation-delay: 0s, 1.7s;
+                animation-fill-mode: forwards, forwards;
+            }
+        }
+    }
+}
+
+</style>
