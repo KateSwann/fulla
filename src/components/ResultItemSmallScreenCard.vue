@@ -214,7 +214,7 @@ const props = defineProps({
         }
 
         &__title {
-            min-height: 44px;
+            // min-height: 44px;
         }
 
         .result-item-small-card__article-social-network-card {

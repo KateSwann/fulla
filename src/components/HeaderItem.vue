@@ -77,12 +77,12 @@ const getUrlQueryParams = async () => {
 }
 
 const setUrlQueryParams = () => {
-    router.push({ name: 'search', query: { q: searchQuery.value } })
+    router.push({ name: 'search', query: { q: searchQuery.value } });
 }
 
 function clearSearchField() {
     searchQuery.value = "";
-    router.push({ name: 'search' })
+    router.push({ name: 'start' });
 }
 
 function toggleSearchOverlay() {
@@ -99,7 +99,7 @@ function clearSearchSuggestion(id) {
     <header class="header">
         <div class="header-animated-logo"
              @click="toggleHeaderIconSize">
-            <RouterLink :to="{ name: 'search' }"
+            <RouterLink :to="{ name: 'start' }"
                         class="header-animated-logo__prefix"></RouterLink>
             <div class="header-animated-logo__stretch-line">
                 <div class="header-animated-logo__search-box
@@ -131,6 +131,7 @@ function clearSearchSuggestion(id) {
                 <div class="search-overlay-box__search-box
                             search-box">
                     <input
+                        @keyup.enter="setUrlQueryParams"
                         v-model.trim="searchQuery"
                         class="search-box__input"
                         :class="{ 'search-box__input--empty': !searchQuery }"

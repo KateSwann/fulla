@@ -134,52 +134,65 @@ const filteredSearchResults = computed(() => {
 
 <template>
     <main class="search-view">
-        <!-- START Содержание контента - mobile -->
-        <div class="search-view__content"
-             v-show="grid.isMobileAndTablet">
-            <template v-for="(resultItem, index) in filteredSearchResults"
-                      :key="index">
-                <ResultItemSmallScreenCard
-                    @click="toggleResultItemOpen(resultItem)"
-                    :class="{ 'result-item-small-card--active': resultItem.isActive }"
-                    :resultItem=resultItem
-                    @close-result-item="closeAllResultItems">
-                </ResultItemSmallScreenCard>
-            </template>
-        </div>
-        <!-- END Содержание контента - tablet -->
-
-        <!-- START Содержание контента - desktop -->
-        <div class="search-view__content"
-             v-show="grid.isDesktop">
-            <div class="search-view__left-column">
+        <template v-if="filteredSearchResults.length">
+            <!-- START Содержание контента - mobile -->
+            <div class="search-view__content"
+                 v-show="grid.isMobileAndTablet">
                 <template v-for="(resultItem, index) in filteredSearchResults"
-                        :key="index">
-                    <ResultItemBigScreenCard
+                          :key="index">
+                    <ResultItemSmallScreenCard
                         @click="toggleResultItemOpen(resultItem)"
-                        :class="{ 'result-item-big-card-container--active': resultItem.isActive }"
+                        :class="{ 'result-item-small-card--active': resultItem.isActive }"
                         :resultItem=resultItem
                         @close-result-item="closeAllResultItems">
-                    </ResultItemBigScreenCard>
+                    </ResultItemSmallScreenCard>
                 </template>
             </div>
+            <!-- END Содержание контента - tablet -->
 
-            <div class="search-view__right-column">
-                RR
+            <!-- START Содержание контента - desktop -->
+            <div class="search-view__content"
+                 v-show="grid.isDesktop">
+                <div class="search-view__left-column">
+                    <template v-for="(resultItem, index) in filteredSearchResults"
+                            :key="index">
+                        <ResultItemBigScreenCard
+                            @click="toggleResultItemOpen(resultItem)"
+                            :class="{ 'result-item-big-card-container--active': resultItem.isActive }"
+                            :resultItem=resultItem
+                            @close-result-item="closeAllResultItems">
+                        </ResultItemBigScreenCard>
+                    </template>
+                </div>
+
+                <div class="search-view__right-column">
+                    RR
+                </div>
             </div>
-        </div>
-        <!-- END Содержание контента - desktop -->
+            <!-- END Содержание контента - desktop -->
 
-        <div>
-            <p>Screen width is {{ screen.width }}</p>
-            <p>Screen height is {{ screen.height }}</p>
-            <p>Current breakpoint is {{ grid.breakpoint }}</p>
-        </div>
+            <div>
+                <p>Screen width is {{ screen.width }}</p>
+                <p>Screen height is {{ screen.height }}</p>
+                <p>Current breakpoint is {{ grid.breakpoint }}</p>
+            </div>
+        </template>
+        <p v-else class="search-view__empty-text">
+            Ничего не найдено. Попробуйте еще раз.
+        </p>
     </main>
 </template>
 
 <style lang="scss">
 .search-view {
+    &__empty-text {
+        max-width: 200px;
+        margin: 40px auto;
+        font: 400 16px/1.4 'Roboto Mono';
+        text-align: center;
+        letter-spacing: -0.02em;
+        color: rgba($color: #000000, $alpha: .6);
+    }
     @media (min-width: 768px) and (max-width: 1439px) {
         &__content {
             max-width: 728px;
