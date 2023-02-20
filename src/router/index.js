@@ -18,6 +18,7 @@ const router = createRouter({
                     path: 'search',
                     name: 'search',
                     component: () => import('../views/SearchView.vue'),
+                    props: route => ({ query: route.query.q }),
                     meta: { title: 'Поиск' },
                 },
                 {

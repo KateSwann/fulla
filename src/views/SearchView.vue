@@ -1,9 +1,13 @@
 <script setup>
-import { ref, onBeforeMount }  from 'vue'
+import { ref, computed, onBeforeMount, onMounted, onUpdated }  from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { useScreen, useGrid } from 'vue-screen'
 
 import ResultItemBigScreenCard from '@/components/ResultItemBigScreenCard.vue'
 import ResultItemSmallScreenCard from '@/components/ResultItemSmallScreenCard.vue'
+
+const router = useRouter()
+const route = useRoute()
 
 const screen = useScreen({})
 const grid = useGrid({
@@ -82,10 +86,24 @@ const testSearchResultsListData = [
     },
 ]
 let modifiedSearchResultsList = ref();
+let urlQueryParams = ref("");
 
 onBeforeMount(() => {
     modifySearchResults();
 });
+
+onMounted(() => {
+    getUrlQueryParams()
+});
+
+onUpdated(() => {
+    getUrlQueryParams()
+});
+
+const getUrlQueryParams = async () => {
+  await router.isReady();
+  urlQueryParams.value = route.query.q;
+}
 
 function modifySearchResults() {
     modifiedSearchResultsList.value = testSearchResultsListData.map(i => ({...i, isActive: false}));
@@ -99,6 +117,19 @@ function toggleResultItemOpen(item) {
     closeAllResultItems();
     item.isActive = !item.isActive;
 }
+
+const filteredSearchResults = computed(() => {
+    if (urlQueryParams.value) {
+        return modifiedSearchResultsList.value.filter((resultItem) => {
+            return urlQueryParams.value
+                    .toLowerCase()
+                    .split(" ")
+                    .every((v) => resultItem.text.toLowerCase().includes(v))
+        });
+    } else {
+        return modifiedSearchResultsList.value;
+    }
+});
 </script>
 
 <template>
@@ -106,7 +137,7 @@ function toggleResultItemOpen(item) {
         <!-- START Содержание контента - mobile -->
         <div class="search-view__content"
              v-show="grid.isMobileAndTablet">
-            <template v-for="(resultItem, index) in modifiedSearchResultsList"
+            <template v-for="(resultItem, index) in filteredSearchResults"
                       :key="index">
                 <ResultItemSmallScreenCard
                     @click="toggleResultItemOpen(resultItem)"
@@ -122,7 +153,7 @@ function toggleResultItemOpen(item) {
         <div class="search-view__content"
              v-show="grid.isDesktop">
             <div class="search-view__left-column">
-                <template v-for="(resultItem, index) in modifiedSearchResultsList"
+                <template v-for="(resultItem, index) in filteredSearchResults"
                         :key="index">
                     <ResultItemBigScreenCard
                         @click="toggleResultItemOpen(resultItem)"

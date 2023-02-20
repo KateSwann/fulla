@@ -1,9 +1,12 @@
 <script setup>
-import { ref }  from 'vue'
-import { onBeforeRouteUpdate } from "vue-router";
+import { ref, onMounted }  from 'vue'
+import { useRoute, useRouter, onBeforeRouteUpdate } from "vue-router";
 import { useGrid } from 'vue-screen'
 
 import IconCross from '@/components/Icons/Controls/IconCross.vue'
+
+const router = useRouter()
+const route = useRoute()
 
 const grid = useGrid({
     sm: 0,
@@ -14,7 +17,7 @@ const grid = useGrid({
     isDesktop: grid => grid.lg,
 })
 
-let searchField = ref("");
+const searchQuery = ref("");
 let isSearchOverlayOpen = ref(false);
 let searchSuggestionsListTestData = ref([
     {
@@ -63,8 +66,23 @@ onBeforeRouteUpdate(async () => {
     isSearchOverlayOpen.value = await false;
 })
 
+onMounted(() => {
+    getUrlQueryParams()
+});
+
+const getUrlQueryParams = async () => {
+  await router.isReady();
+  searchQuery.value = route.query.q
+  console.log('from Header item:', searchQuery.value);
+}
+
+const setUrlQueryParams = () => {
+    router.push({ name: 'search', query: { q: searchQuery.value } })
+}
+
 function clearSearchField() {
-    searchField.value = "";
+    searchQuery.value = "";
+    router.push({ name: 'search' })
 }
 
 function toggleSearchOverlay() {
@@ -87,9 +105,10 @@ function clearSearchSuggestion(id) {
                 <div class="header-animated-logo__search-box
                             search-box">
                     <input
-                        v-model.trim="searchField"
+                        @keyup.enter="setUrlQueryParams"
+                        v-model.trim="searchQuery"
                         class="search-box__input"
-                        :class="{ 'search-box__input--empty': !searchField }"
+                        :class="{ 'search-box__input--empty': !searchQuery }"
                         type="search"
                         name="q"
                         autocomplete="off"
@@ -112,9 +131,9 @@ function clearSearchSuggestion(id) {
                 <div class="search-overlay-box__search-box
                             search-box">
                     <input
-                        v-model.trim="searchField"
+                        v-model.trim="searchQuery"
                         class="search-box__input"
-                        :class="{ 'search-box__input--empty': !searchField }"
+                        :class="{ 'search-box__input--empty': !searchQuery }"
                         type="search"
                         name="q"
                         autocomplete="off"
