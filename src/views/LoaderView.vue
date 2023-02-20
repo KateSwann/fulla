@@ -1,10 +1,28 @@
 <script setup>
+import { ref }  from 'vue'
+import { onBeforeRouteLeave } from "vue-router";
+
 import HeaderItem from '@/components/HeaderItem.vue'
+
+const showHeader = ref(true)
+
+onBeforeRouteLeave((to, from, next) => {
+    if (to.name === 'search') {
+        showHeader.value = false;
+        setTimeout(() => {
+            next()
+        }, 1000)
+    } else {
+        next();
+    }
+})
 </script>
 
 <template>
     <div class="loader-view">
-        <HeaderItem />
+        <Transition name="header">
+            <HeaderItem v-if="showHeader" />
+        </Transition>
     </div>
 </template>
 
@@ -68,6 +86,18 @@ $logo-start-width: $logo-half-width;
     }
 }
 
+@keyframes movingHeaderCenterToTop {
+    from {
+        top: 50%;
+        transform: translateY(-50%);
+    }
+
+    to {
+        top: 0;
+        transform: translateY(0);
+    }
+}
+
 .loader-view {
     position: fixed;
     top: 0;
@@ -78,13 +108,16 @@ $logo-start-width: $logo-half-width;
     .header {
         position: absolute;
         top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background-color: gold;
+        left: 0;
+        transform: translateY(-50%);
 
         .search-box {
             opacity: 0;
         }
+    }
+
+    .header-leave-active {
+        animation: .7s movingHeaderCenterToTop forwards;
     }
 
     .search-overlay-box {
