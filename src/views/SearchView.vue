@@ -1,7 +1,7 @@
 <script setup>
 import { ref, computed, onBeforeMount, onMounted, onUpdated }  from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import { useScreen, useGrid } from 'vue-screen'
+import { useGrid } from 'vue-screen'
 
 import ResultItemBigScreenCard from '@/components/ResultItemBigScreenCard.vue'
 import ResultItemSmallScreenCard from '@/components/ResultItemSmallScreenCard.vue'
@@ -9,7 +9,6 @@ import ResultItemSmallScreenCard from '@/components/ResultItemSmallScreenCard.vu
 const router = useRouter()
 const route = useRoute()
 
-const screen = useScreen({})
 const grid = useGrid({
     sm: 0,
     md: 768,
@@ -87,6 +86,7 @@ const testSearchResultsListData = [
 ]
 let modifiedSearchResultsList = ref();
 let urlQueryParams = ref("");
+const showSearchContent = ref(false)
 
 onBeforeMount(() => {
     modifySearchResults();
@@ -94,15 +94,16 @@ onBeforeMount(() => {
 
 onMounted(() => {
     getUrlQueryParams()
+    showSearchContent.value = true;
 });
 
 onUpdated(() => {
-    getUrlQueryParams()
+    getUrlQueryParams();
 });
 
 const getUrlQueryParams = async () => {
-  await router.isReady();
-  urlQueryParams.value = route.query.q;
+    await router.isReady();
+    urlQueryParams.value = route.query.q;
 }
 
 function modifySearchResults() {
@@ -133,57 +134,82 @@ const filteredSearchResults = computed(() => {
 </script>
 
 <template>
-    <main class="search-view">
-        <template v-if="filteredSearchResults.length">
-            <!-- START Содержание контента - mobile -->
-            <div class="search-view__content"
-                 v-show="grid.isMobileAndTablet">
-                <template v-for="(resultItem, index) in filteredSearchResults"
-                          :key="index">
-                    <ResultItemSmallScreenCard
-                        @click="toggleResultItemOpen(resultItem)"
-                        :class="{ 'result-item-small-card--active': resultItem.isActive }"
-                        :resultItem=resultItem
-                        @close-result-item="closeAllResultItems">
-                    </ResultItemSmallScreenCard>
-                </template>
-            </div>
-            <!-- END Содержание контента - tablet -->
-
-            <!-- START Содержание контента - desktop -->
-            <div class="search-view__content"
-                 v-show="grid.isDesktop">
-                <div class="search-view__left-column">
-                    <template v-for="(resultItem, index) in filteredSearchResults"
-                            :key="index">
-                        <ResultItemBigScreenCard
-                            @click="toggleResultItemOpen(resultItem)"
-                            :class="{ 'result-item-big-card-container--active': resultItem.isActive }"
-                            :resultItem=resultItem
-                            @close-result-item="closeAllResultItems">
-                        </ResultItemBigScreenCard>
-                    </template>
+    <Transition name="search-content">
+        <main class="search-view" v-if="showSearchContent">
+            <template v-if="filteredSearchResults.length">
+                <!-- START Содержание контента - mobile -->
+                <div class="search-view__content"
+                    v-show="grid.isMobileAndTablet">
+                    <TransitionGroup name="search-results-list" tag="ul">
+                        <template v-if="urlQueryParams">
+                            <template v-for="(resultItem, index) in filteredSearchResults"
+                                    :key="index">
+                                <ResultItemSmallScreenCard
+                                    @click="toggleResultItemOpen(resultItem)"
+                                    :class="{ 'result-item-small-card--active': resultItem.isActive }"
+                                    :resultItem=resultItem
+                                    @close-result-item="closeAllResultItems">
+                                </ResultItemSmallScreenCard>
+                            </template>
+                        </template>
+                    </TransitionGroup>
                 </div>
+                <!-- END Содержание контента - tablet -->
 
-                <div class="search-view__right-column">
-                    RR
+                <!-- START Содержание контента - desktop -->
+                <div class="search-view__content"
+                    v-show="grid.isDesktop">
+                    <div class="search-view__left-column">
+                        <TransitionGroup name="search-results-list" tag="ul">
+                            <template v-if="urlQueryParams">
+                                <template v-for="(resultItem, index) in filteredSearchResults"
+                                        :key="index">
+                                    <ResultItemBigScreenCard
+                                        @click="toggleResultItemOpen(resultItem)"
+                                        :class="{ 'result-item-big-card-container--active': resultItem.isActive }"
+                                        :resultItem=resultItem
+                                        @close-result-item="closeAllResultItems">
+                                    </ResultItemBigScreenCard>
+                                </template>
+                            </template>
+                        </TransitionGroup>
+                    </div>
+
+                    <div class="search-view__right-column">
+                        RR
+                    </div>
                 </div>
-            </div>
-            <!-- END Содержание контента - desktop -->
+                <!-- END Содержание контента - desktop -->
+            </template>
 
-            <div>
-                <p>Screen width is {{ screen.width }}</p>
-                <p>Screen height is {{ screen.height }}</p>
-                <p>Current breakpoint is {{ grid.breakpoint }}</p>
-            </div>
-        </template>
-        <p v-else class="search-view__empty-text">
-            Ничего не найдено. Попробуйте еще раз.
-        </p>
-    </main>
+            <p v-else class="search-view__empty-text">
+                Ничего не найдено. Попробуйте еще раз.
+            </p>
+        </main>
+    </Transition>
 </template>
 
 <style lang="scss">
+.search-content-enter-active,
+.search-content-leave-active {
+  transition: all 0.5s ease;
+}
+.search-content-enter-from,
+.search-content-leave-top {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+.search-results-list-enter-active,
+.search-results-list-leave-active {
+  transition: all 0.5s ease;
+}
+.search-results-list-enter-from,
+.search-results-list-leave-to {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
 .search-view {
     &__empty-text {
         max-width: 200px;
@@ -193,6 +219,7 @@ const filteredSearchResults = computed(() => {
         letter-spacing: -0.02em;
         color: rgba($color: #000000, $alpha: .6);
     }
+
     @media (min-width: 768px) and (max-width: 1439px) {
         &__content {
             max-width: 728px;
@@ -211,7 +238,6 @@ const filteredSearchResults = computed(() => {
         &__left-column {
             flex: 1;
             max-width: calc(50% - 60px);
-            background-color: gold;
 
             &:hover {
                 box-shadow: inset -1px 0px 0px 0px rgba(217,217,217,0.6);

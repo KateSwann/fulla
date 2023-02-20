@@ -72,8 +72,7 @@ onMounted(() => {
 
 const getUrlQueryParams = async () => {
   await router.isReady();
-  searchQuery.value = route.query.q
-  console.log('from Header item:', searchQuery.value);
+  searchQuery.value = route.query.q;
 }
 
 const setUrlQueryParams = () => {

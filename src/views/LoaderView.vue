@@ -11,7 +11,9 @@ onBeforeRouteLeave((to, from, next) => {
         showHeader.value = false;
         setTimeout(() => {
             next()
-        }, 1000)
+        // Timer counter equals movingHeaderCenterToTop animation
+        // duratin minus 50ms
+        }, 650)
     } else {
         next();
     }
