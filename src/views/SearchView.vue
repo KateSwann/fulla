@@ -119,6 +119,17 @@ function toggleResultItemOpen(item) {
     item.isActive = !item.isActive;
 }
 
+const nounCounterDeclension = computed(() => {
+    const n = filteredSearchResults.value.length;
+    return `результа${
+        (n%100<11 || n%100>19) ?
+            ((n%10!=1) ?
+                ((n%10>1 && n%10<5) ? 'та':'тов')
+            :'т')
+        :'тов'
+    }`;
+});
+
 const filteredSearchResults = computed(() => {
     if (urlQueryParams.value) {
         return modifiedSearchResultsList.value.filter((resultItem) => {
@@ -137,9 +148,16 @@ const filteredSearchResults = computed(() => {
     <Transition name="search-content">
         <main class="search-view" v-if="showSearchContent">
             <template v-if="filteredSearchResults.length">
+                <section class="search-results-counter-block">
+                    Fulla /
+                    <span class="search-results-counter-block__highlighted-text">
+                        {{ filteredSearchResults.length }} {{ nounCounterDeclension }} поиска
+                    </span>
+                </section>
+
                 <!-- START Содержание контента - mobile -->
-                <div class="search-view__content"
-                    v-show="grid.isMobileAndTablet">
+                <section class="search-view__content"
+                     v-show="grid.isMobileAndTablet">
                     <TransitionGroup name="search-results-list" tag="ul">
                         <template v-if="urlQueryParams">
                             <template v-for="(resultItem, index) in filteredSearchResults"
@@ -153,12 +171,12 @@ const filteredSearchResults = computed(() => {
                             </template>
                         </template>
                     </TransitionGroup>
-                </div>
+                </section>
                 <!-- END Содержание контента - tablet -->
 
                 <!-- START Содержание контента - desktop -->
-                <div class="search-view__content"
-                    v-show="grid.isDesktop">
+                <section class="search-view__content"
+                     v-show="grid.isDesktop">
                     <div class="search-view__left-column">
                         <TransitionGroup name="search-results-list" tag="ul">
                             <template v-if="urlQueryParams">
@@ -178,7 +196,7 @@ const filteredSearchResults = computed(() => {
                     <div class="search-view__right-column">
                         RR
                     </div>
-                </div>
+                </section>
                 <!-- END Содержание контента - desktop -->
             </template>
 
@@ -220,11 +238,34 @@ const filteredSearchResults = computed(() => {
         color: rgba($color: #000000, $alpha: .6);
     }
 
+    .search-results-counter-block {
+        font: 400 12px/1.4 'Roboto Mono';
+        letter-spacing: -0.03em;
+        color: rgba($color: #000000, $alpha: .4);
+
+        &__highlighted-text {
+            color: rgba($color: #000000, $alpha: .6);
+        }
+    }
+
+    @media (max-width: 767px) {
+        .search-results-counter-block {
+            padding: 84px 0 8px;
+            margin: 0 20px 6px;
+            border-bottom: 1px solid rgba($color: #000000, $alpha: .1);;
+        }
+    }
+
     @media (min-width: 768px) and (max-width: 1439px) {
         &__content {
             max-width: 728px;
-            padding: 20px;
+            padding: 0 20px;
             margin: 0 auto;
+        }
+
+        .search-results-counter-block {
+            margin-bottom: 44px;
+            text-align: center;
         }
     }
 
@@ -251,6 +292,11 @@ const filteredSearchResults = computed(() => {
         &__right-column {
             flex: 1;
             background: linear-gradient(90deg, rgba(255,255,255,1) 60px, rgba(217,217,217,1) 60px);
+        }
+
+        .search-results-counter-block {
+            margin-bottom: 30px;
+            text-align: center;
         }
 
         .result-item-card {

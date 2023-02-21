@@ -25,6 +25,12 @@ onBeforeRouteLeave((to, from, next) => {
         <Transition name="header">
             <HeaderItem v-if="showHeader" />
         </Transition>
+
+        <p class="loader-view__info-text">
+            Все данные защищенны.<br>
+            Мы испольщуем ключи ширфования,<br>
+            чтобы ваши данные оставались анонимными.
+        </p>
     </div>
 </template>
 
@@ -107,11 +113,25 @@ $logo-start-width: $logo-half-width;
     left: 0;
     right: 0;
 
+    &__info-text {
+        width: 240px;
+        position: absolute;
+        bottom: 40px;
+        left: 50%;
+        transform: translateX(-50%);
+        font: 400 10px/1 'Roboto Mono';
+        letter-spacing: -0.03em;
+        text-align: center;
+        color: rgba($color: #000000, $alpha: .3);
+    }
+
     .header {
         position: absolute;
         top: 50%;
         left: 0;
         transform: translateY(-50%);
+        padding: 0;
+        height: 0;
 
         .search-box {
             opacity: 0;
@@ -131,6 +151,8 @@ $logo-start-width: $logo-half-width;
         --logo-side-padding: 20px;
 
         .header {
+            transform: translateY(calc(-50% - 9vh));
+
             .search-box {
                 animation: .85s movingSearchTopToBottom 1.1s forwards;
             }
@@ -146,6 +168,8 @@ $logo-start-width: $logo-half-width;
         --logo-side-padding: 60px;
 
         .header {
+            transform: translateY(calc(-50% - 4.5vh));
+
             .search-box {
                 animation: .85s movingSearchTopToBottom 1.1s forwards;
             }
@@ -158,6 +182,10 @@ $logo-start-width: $logo-half-width;
 
     @media (min-width: 1440px) {
         --logo-side-padding: 60px;
+
+        &__info-text {
+            display: none;
+        }
 
         .header {
             .search-box {

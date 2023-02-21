@@ -96,8 +96,7 @@ function clearSearchSuggestion(id) {
 
 <template>
     <header class="header">
-        <div class="header-animated-logo"
-             @click="toggleHeaderIconSize">
+        <div class="header-animated-logo">
             <RouterLink :to="{ name: 'start' }"
                         class="header-animated-logo__prefix"></RouterLink>
             <div class="header-animated-logo__stretch-line">
@@ -183,7 +182,8 @@ function clearSearchSuggestion(id) {
     position: fixed;
     top: 0;
     width: 100%;
-    border-bottom: 4px solid lightsalmon;
+    display: flex;
+    justify-content: center;
     background-color: var(--background-color-0);
     z-index: 100;
 
@@ -207,9 +207,6 @@ function clearSearchSuggestion(id) {
         flex-wrap: nowrap;
         align-items: flex-end;
         position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
 
         &__search-box {
             position: absolute;
@@ -396,14 +393,10 @@ function clearSearchSuggestion(id) {
     @media (max-width: 767px) {
         --logo-side-padding: 20px;
 
-        height: 90px;
+        height: 111px;
+        padding-top: 60px;
 
         .search-box {
-            &__input {
-                &--empty {
-                }
-            }
-
             &__button-clear {
                 margin: 0 4.8px 0 3px
             }
@@ -413,14 +406,10 @@ function clearSearchSuggestion(id) {
     @media (min-width: 768px) and (max-width: 1439px) {
         --logo-side-padding: 60px;
 
-        height: 140px;
+        height: 111px;
+        padding-top: 60px;
 
         .search-box {
-            &__input {
-                &--empty {
-                }
-            }
-
             &__button-clear {
                 margin: 0 10.8px 0 7px;
             }
@@ -430,7 +419,8 @@ function clearSearchSuggestion(id) {
     @media (min-width: 1440px) {
         --logo-side-padding: 60px;
 
-        height: 108px;
+        height: 79px;
+        padding-top: 28px;
 
         .search-box {
             &__button-clear {
