@@ -7,7 +7,7 @@ const router = createRouter({
         {
          path: '/',
          name: 'start',
-         component: () => import('../views/LoaderView.vue'),
+         component: () => import('../views/StartView.vue'),
          meta: { title: 'Fulla' },
         },
         {

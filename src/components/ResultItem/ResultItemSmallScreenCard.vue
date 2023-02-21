@@ -1,10 +1,10 @@
 <script setup>
 import { ref }  from 'vue'
 
-import ArticleSocialCard from './Article/ArticleSocialCard.vue'
+import ArticleSocialCard from '../Article/ArticleSocialCard.vue'
 import IconCross from '@/components/Icons/Controls/IconCross.vue'
 import IconOpen from '@/components/Icons/Controls/IconOpen.vue'
-import ResultItemArticlePopup from '@/components/ResultItemArticlePopup.vue'
+import ResultItemArticlePopup from '@/components/ResultItem/ResultItemArticlePopup.vue'
 
 let isShowResultItemPopup = ref(false);
 

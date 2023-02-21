@@ -2,7 +2,7 @@
 import { ref }  from 'vue'
 import { onBeforeRouteLeave } from "vue-router";
 
-import HeaderItem from '@/components/HeaderItem.vue'
+import HeaderItem from '@/components/Base/HeaderItem.vue'
 
 const showHeader = ref(true)
 

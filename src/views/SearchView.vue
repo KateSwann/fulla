@@ -3,8 +3,8 @@ import { ref, computed, onBeforeMount, onMounted, onUpdated }  from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useGrid } from 'vue-screen'
 
-import ResultItemBigScreenCard from '@/components/ResultItemBigScreenCard.vue'
-import ResultItemSmallScreenCard from '@/components/ResultItemSmallScreenCard.vue'
+import ResultItemBigScreenCard from '@/components/ResultItem/ResultItemBigScreenCard.vue'
+import ResultItemSmallScreenCard from '@/components/ResultItem/ResultItemSmallScreenCard.vue'
 
 const router = useRouter()
 const route = useRoute()
