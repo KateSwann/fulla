@@ -41,15 +41,7 @@ const props = defineProps({
         </div>
 
         <div class="result-item-small-card__main-content">
-            <RouterLink :to="{
-                            name: 'article',
-                            params: {
-                                resultItemId: resultItem.id,
-                            },
-                        }"
-                    class="result-item-small-card__title-link">
-                <h2 class="result-item-small-card__title">{{ resultItem.title }}</h2>
-            </RouterLink>
+            <h2 class="result-item-small-card__title">{{ resultItem.title }}</h2>
 
             <p class="result-item-small-card__text-container">
                 <span class="result-item-small-card__text">{{ resultItem.text }}</span>
@@ -94,6 +86,7 @@ const props = defineProps({
 .result-item-small-card {
     position: relative;
     color: var(--text-color-regular);
+    cursor: pointer;
 
     &:hover {
         background-color: var(--background-color-50);
@@ -108,12 +101,9 @@ const props = defineProps({
         color: rgba($color: #000000, $alpha: .4);
     }
 
-    &__title-link {
+    &__title {
         display: block;
         margin-bottom: 4px;
-    }
-
-    &__title {
         font: 700 20px/1.12 'Helvetica';
         letter-spacing: -0.05em;
         color: var(--text-color-regular);
@@ -178,12 +168,10 @@ const props = defineProps({
 
     &--active {
         background-color: var(--background-color-50);
-
-        .result-item-small-card__title-link {
-            margin-right: 112px;
-        }
+        cursor: default;
 
         .result-item-small-card__title {
+            margin-right: 112px;
             margin-bottom: 16px;
         }
 

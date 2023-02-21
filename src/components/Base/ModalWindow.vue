@@ -66,6 +66,7 @@ export default {
             overflow-y: auto;
             overflow-x: hidden;
             padding-right: 20px;
+            padding-bottom: 60px;
         }
     }
 

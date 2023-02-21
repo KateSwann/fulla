@@ -297,7 +297,7 @@ function clearSearchSuggestion(id) {
 
             &--empty {
                 margin-left: 9px;
-                box-shadow: inset 1px 0 0 0 black;
+                box-shadow: inset 2px 0px 0 -1px black;
 
                 & + .search-box__button-clear {
                     display: none;

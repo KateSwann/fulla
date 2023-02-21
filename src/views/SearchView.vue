@@ -86,7 +86,8 @@ const testSearchResultsListData = [
 ]
 let modifiedSearchResultsList = ref();
 let urlQueryParams = ref("");
-const showSearchContent = ref(false)
+let isAnyResultItemActive = ref(false);
+let showSearchContent = ref(false)
 
 onBeforeMount(() => {
     modifySearchResults();
@@ -112,11 +113,13 @@ function modifySearchResults() {
 
 function closeAllResultItems() {
     modifiedSearchResultsList.value.map(i => i.isActive = false);
+    isAnyResultItemActive.value = false;
 }
 
 function toggleResultItemOpen(item) {
     closeAllResultItems();
     item.isActive = !item.isActive;
+    item.isActive ? isAnyResultItemActive.value = true : isAnyResultItemActive.value = false;
 }
 
 const nounCounterDeclension = computed(() => {
@@ -177,7 +180,9 @@ const filteredSearchResults = computed(() => {
                 <!-- START Содержание контента - desktop -->
                 <section class="search-view__content"
                      v-show="grid.isDesktop">
-                    <div class="search-view__left-column">
+                    <div class="search-view__left-column"
+                        :class="{ 'search-view__left-column--result-item-active': isAnyResultItemActive }"
+                        >
                         <TransitionGroup name="search-results-list" tag="ul">
                             <template v-if="urlQueryParams">
                                 <template v-for="(resultItem, index) in filteredSearchResults"
@@ -193,9 +198,9 @@ const filteredSearchResults = computed(() => {
                         </TransitionGroup>
                     </div>
 
-                    <div class="search-view__right-column">
-                        RR
-                    </div>
+                    <div class="search-view__right-column"
+                        :class="{ 'search-view__right-column--result-item-active': isAnyResultItemActive }"
+                        ></div>
                 </section>
                 <!-- END Содержание контента - desktop -->
             </template>
@@ -270,28 +275,36 @@ const filteredSearchResults = computed(() => {
     }
 
     @media (min-width: 1440px) {
+        display: flex;
+        flex-flow: column;
+        min-height: calc(100vh - 79px);
+
         &__content {
             max-width: 1320px;
             margin: 0 auto;
             display: flex;
+            flex: 1;
         }
 
         &__left-column {
             flex: 1;
             max-width: calc(50% - 60px);
 
-            &:hover {
-                box-shadow: inset -1px 0px 0px 0px rgba(217,217,217,0.6);
-
-                &+.search-view__right-column {
-                    background: var(--background-color-0);
-                }
+            &--result-item-active {
+                box-shadow: inset -1px 0px 0px 0px rgba(217, 217, 217, .6);
             }
         }
 
         &__right-column {
+            margin-bottom: 40px;
             flex: 1;
-            background: linear-gradient(90deg, rgba(255,255,255,1) 60px, rgba(217,217,217,1) 60px);
+            background: linear-gradient(90deg,
+                rgba(255, 255, 255, 1) 60px,
+                rgba(217, 217, 217, .3) 60px);
+
+            &--result-item-active {
+                background: none;
+            }
         }
 
         .search-results-counter-block {

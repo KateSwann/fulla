@@ -44,15 +44,7 @@ const props = defineProps({
             </div>
 
             <div class="result-item-big-card__main-content">
-                <RouterLink :to="{
-                                name: 'article',
-                                params: {
-                                    resultItemId: resultItem.id,
-                                },
-                            }"
-                            class="result-item-big-card__title-link">
-                    <h2 class="result-item-big-card__title">{{ resultItem.title }}</h2>
-                </RouterLink>
+                <h2 class="result-item-big-card__title">{{ resultItem.title }}</h2>
 
                 <p class="result-item-big-card__text">{{ resultItem.text }}</p>
             </div>
@@ -108,6 +100,7 @@ const props = defineProps({
 <style lang="scss">
 .result-item-big-card {
     color: var(--text-color-regular);
+    cursor: pointer;
 
     &:hover {
         background-color: var(--background-color-50);
@@ -118,12 +111,8 @@ const props = defineProps({
         color: rgba($color: #000000, $alpha: .4);
     }
 
-    &__title-link {
-        display: block;
-        margin-bottom: 4px;
-    }
-
     &__title {
+        margin-bottom: 4px;
         font: 700 20px/1.12 'Helvetica';
         letter-spacing: -0.05em;
         color: var(--text-color-regular);
@@ -182,20 +171,17 @@ const props = defineProps({
     width: 720px;
     padding: 37px 90px 37px 150px;
     position: fixed;
-    top: 129px;
+    top: 126px;
     left: calc(50% - 60px);
     right: auto;
     bottom: 0;
     overflow-y: scroll;
-    background-color: rgba($color: lightblue, $alpha: .4);
-
-    &__title-link {
-        color: var(--text-color-regular);
-    }
+    background-color: var(--background-color-0);
 
     &__title {
         font: 700 40px/1 'Helvetica';
         letter-spacing: -0.05em;
+        color: var(--text-color-regular);
     }
 
     &__text {
@@ -284,6 +270,8 @@ const props = defineProps({
 
 .result-item-big-card-container {
     &--active {
+        background-color: var(--background-color-50);
+
         .result-item-big-preview-card {
             display: block;
         }
