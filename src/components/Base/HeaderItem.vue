@@ -129,12 +129,52 @@ defineExpose({
                         <IconCross />
                     </span>
                 </div>
+
+                <!-- START search dropdown box -->
+                <section class="search-dropdown-box">
+                    <div class="search-dropdown-box__content">
+                        <div class="search-dropdown-results-list">
+                            <template v-for="(suggestion, index) in searchSuggestionsListTestData"
+                                    :key="index">
+                                <RouterLink :to="{
+                                                    name: 'article',
+                                                    params: { resultItemId: 1 },
+                                                }"
+                                            class="search-dropdown-results-list-item">
+                                    <span class="search-dropdown-results-list-item__text">
+                                        {{ suggestion.title }}
+                                    </span>
+
+                                    <span class="search-dropdown-results-list-item__total">
+                                        1345
+                                    </span>
+                                </RouterLink>
+                            </template>
+
+                            <RouterLink :to="{
+                                                name: 'search',
+                                                query: { q: searchQuery }
+                                            }"
+                                        class="search-dropdown-results-list__item
+                                               search-dropdown-results-list-item">
+                                <span class="search-dropdown-results-list-item__text">
+                                    Смотреть все 3204 результатов для &#171;{{searchQuery}}&#187;
+                                </span>
+
+                                <span class="search-dropdown-results-list-item__icon-enter">
+                                    Enter
+                                </span>
+                            </RouterLink>
+                        </div>
+                    </div>
+                </section>
+                <!-- END search dropdown box -->
             </div>
             <div class="header-animated-logo__postfix"></div>
         </div>
 
         <section class="search-overlay-box"
-             v-show="isSearchOverlayOpen">
+                 v-show="isSearchOverlayOpen">
             <div class="search-overlay-box__content">
                 <div class="search-overlay-box__search-box
                             search-box">
@@ -397,6 +437,97 @@ defineExpose({
             margin-left: 18px;
             padding: 5px;
             cursor: pointer;
+        }
+    }
+
+    .search-dropdown-box {
+        max-height: calc(50vh - 50px);
+        width: 100%;
+        position: absolute;
+        top: calc(100% + 6px);
+        overflow-y: auto;
+        border-top: 6px solid transparent;
+        background-color: var(--background-color-100);
+    }
+
+    .search-dropdown-results-list-item {
+        $item-border-margin-left: 12px;
+        $item-border-margin-right: 20px;
+
+        display: flex;
+        align-items: center;
+        padding: 16px 0 18px;
+        position: relative;
+
+        &:not(:last-child) {
+            &::after {
+                content: "";
+                top: calc(100% - 1px);
+                left: $item-border-margin-left;
+                width: calc(100% - $item-border-margin-left - $item-border-margin-right);
+                height: 1px;
+                position: absolute;
+                background-color: rgba($color: #000000, $alpha: .1);
+            }
+        }
+
+        &:last-child {
+            .search-dropdown-results-list-item__text {
+                color: rgba($color: #000000, $alpha: .4);
+            }
+        }
+
+        &:hover {
+            background-color: #E6E6E6;
+
+            &::after {
+                content: none;
+            }
+
+            &::before {
+                content: "";
+                bottom: calc(100% - 1px);
+                position: absolute;
+                width: 100%;
+                height: 1px;
+                background-color: #E6E6E6;
+            }
+        }
+
+        &__text {
+            margin-left: 20px;
+            flex: 1;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font: 400 14px/1.4 'Helvetica';
+            letter-spacing: -0.02em;
+            color: rgba($color: #000000, $alpha: .6);
+        }
+
+        &__total {
+            margin-right: 20px;
+            white-space: nowrap;
+            font: 400 10px/1.4 'Helvetica Neue';
+            color: rgba($color: #000000, $alpha: .4);
+        }
+
+        &__icon-enter {
+            width: 52px;
+            height: 24px;
+            margin-right: 20px;
+            padding: 0 6px;
+            border-radius: 3px;
+            display: flex;
+            align-items: center;
+            justify-content: end;
+
+            font: 400 10px/1.4 'Helvetica Neue';
+            color: rgba($color: #000000, $alpha: .4);
+            background-color: var(--background-color-0);
+            background-image: url("data:image/svg+xml,%3Csvg width='11' height='9' viewBox='0 0 11 9' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M10.4999 0.5H9.49995V5H2.70697L4.60347 3.1035L3.89647 2.3965L0.792969 5.5L3.89647 8.6035L4.60347 7.8965L2.70697 6H10.4999V0.5Z' fill='%23999999'/%3E%3C/svg%3E%0A");
+            background-repeat: no-repeat;
+            background-position: 7px 8.5px;
         }
     }
 
