@@ -308,7 +308,7 @@ const filteredSearchResults = computed(() => {
         }
 
         .search-results-counter-block {
-            margin-bottom: 30px;
+            margin-bottom: 43px;
             text-align: center;
         }
 

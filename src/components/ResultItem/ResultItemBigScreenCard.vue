@@ -59,13 +59,23 @@ const props = defineProps({
                                     resultItemId: resultItem.id,
                                 },
                             }"
+                        target='_blank'
                         class="result-item-big-preview-card__title-link">
                 <h2 class="result-item-big-preview-card__title">{{ resultItem.title }}</h2>
             </RouterLink>
 
             <p class="result-item-big-preview-card__text">
                 {{ resultItem.text }}
-                <span class="result-item-big-preview-card__button-read-more">Читать подробнее</span>
+                <RouterLink :to="{
+                                name: 'article',
+                                params: {
+                                    resultItemId: resultItem.id,
+                                },
+                            }"
+                        target='_blank'
+                        class="result-item-big-preview-card__button-read-more">
+                        Читать подробнее
+                </RouterLink>
             </p>
 
             <div class="controls-buttons-group">
@@ -75,11 +85,17 @@ const props = defineProps({
                     <IconCross />
                 </div>
 
-                <div class="controls-buttons-group__button
-                            controls-buttons-group__button--open"
-                            @click="toggleResultItemPopup">
+                <RouterLink :to="{
+                                name: 'article',
+                                params: {
+                                    resultItemId: resultItem.id,
+                                },
+                            }"
+                            target='_blank'
+                            class="controls-buttons-group__button
+                            controls-buttons-group__button--open">
                     <IconOpen />
-                </div>
+                </RouterLink>
             </div>
 
             <ArticleSocialCard />
@@ -155,7 +171,12 @@ const props = defineProps({
     @media (min-width: 1440px) {
         display: flex;
         flex-wrap: nowrap;
-        padding: 20px 64px 20px 36px;
+        padding: 24px 86px 23px 36px;
+
+        &__title {
+            margin-bottom: 7px;
+            line-height: 1.05;
+        }
 
         &__side-content {
             flex: 0 0 100px;
@@ -168,8 +189,8 @@ const props = defineProps({
 
 .result-item-big-preview-card {
     display: none;
-    width: 720px;
-    padding: 37px 90px 37px 150px;
+    width: 750px;
+    padding: 37px 120px 37px 90px;
     position: fixed;
     top: 126px;
     left: calc(50% - 60px);
@@ -195,6 +216,7 @@ const props = defineProps({
         font-weight: 700;
         line-height: 1.4;
         border-bottom: 1px solid;
+        color: var(--text-color-regular);
         cursor: pointer;
     }
 
@@ -211,7 +233,7 @@ const props = defineProps({
         display: flex;
         flex-direction: column;
         position: fixed;
-        right: calc(50% - 645px);
+        right: calc(50% - 660px);
         top: 116px;
         z-index: 5;
 

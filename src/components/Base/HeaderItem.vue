@@ -18,6 +18,7 @@ const grid = useGrid({
 })
 
 const searchQuery = ref("");
+const searchInput = ref(null)
 let isSearchOverlayOpen = ref(false);
 let searchSuggestionsListTestData = ref([
     {
@@ -92,6 +93,14 @@ function clearSearchSuggestion(id) {
     const saggestionItem = searchSuggestionsListTestData.value.find(el => el.id === id);
     saggestionItem.isVisible = false;
 }
+
+function setSearchInputFocus(){
+    searchInput.value.focus()
+}
+
+defineExpose({
+    setSearchInputFocus
+})
 </script>
 
 <template>
@@ -105,6 +114,7 @@ function clearSearchSuggestion(id) {
                     <input
                         @keyup.enter="setUrlQueryParams"
                         v-model.trim="searchQuery"
+                        ref="searchInput"
                         class="search-box__input"
                         :class="{ 'search-box__input--empty': !searchQuery }"
                         type="search"
@@ -179,6 +189,13 @@ function clearSearchSuggestion(id) {
 
 <style lang="scss">
 .header {
+    $logo-prefix-width: 23px;
+    $logo-prefix-margin: 2px;
+    $logo-postfix-width: 41px;
+    $logo-postfix-margin: 4px;
+    $logo-side-padding-big: 60px;
+    $logo-side-padding-small: 20px;
+
     position: fixed;
     top: 0;
     width: 100%;
@@ -188,12 +205,6 @@ function clearSearchSuggestion(id) {
     z-index: 100;
 
     .header-animated-logo {
-        $logo-prefix-width: 23px;
-        $logo-prefix-margin: 2px;
-        $logo-postfix-width: 41px;
-        $logo-postfix-margin: 4px;
-        $logo-side-padding-big: 60px;
-        $logo-side-padding-small: 20px;
         $logo-full-width: calc(
                                 100vw -
                                 (var(--logo-side-padding) * 2) -
@@ -232,7 +243,7 @@ function clearSearchSuggestion(id) {
 
         &__stretch-line {
             width: $logo-full-width;
-            margin: 0 4px 0 2px;
+            margin: 0 $logo-postfix-margin 0 $logo-prefix-margin;
             height: 11.21px;
             border-bottom: 4.8px solid var(--text-color-regular);
             position: relative;
@@ -297,7 +308,6 @@ function clearSearchSuggestion(id) {
 
             &--empty {
                 margin-left: 9px;
-                box-shadow: inset 2px 0px 0 -1px black;
 
                 & + .search-box__button-clear {
                     display: none;
@@ -421,6 +431,23 @@ function clearSearchSuggestion(id) {
 
         height: 79px;
         padding-top: 28px;
+
+        .header-animated-logo {
+            $logo-prefix-margin: 13px;
+            $logo-postfix-margin: 14px;
+            $logo-full-width: calc(
+                                    100vw -
+                                    (var(--logo-side-padding) * 2) -
+                                    $logo-prefix-width -
+                                    $logo-postfix-width -
+                                    $logo-prefix-margin -
+                                    $logo-postfix-margin
+                                );
+            &__stretch-line {
+                width: $logo-full-width;
+                margin: 0 $logo-postfix-margin 0 $logo-prefix-margin;
+            }
+        }
 
         .search-box {
             &__button-clear {

@@ -1,10 +1,15 @@
 <script setup>
-import { ref }  from 'vue'
+import { ref, onMounted }  from 'vue'
 import { onBeforeRouteLeave } from "vue-router";
 
 import HeaderItem from '@/components/Base/HeaderItem.vue'
 
 const showHeader = ref(true)
+const childComponent = ref();
+
+onMounted(() => {
+  childComponent.value.setSearchInputFocus();
+});
 
 onBeforeRouteLeave((to, from, next) => {
     if (to.name === 'search') {
@@ -23,7 +28,7 @@ onBeforeRouteLeave((to, from, next) => {
 <template>
     <div class="loader-view">
         <Transition name="header">
-            <HeaderItem v-if="showHeader" />
+            <HeaderItem v-if="showHeader" ref="childComponent" />
         </Transition>
 
         <p class="loader-view__info-text">
@@ -182,10 +187,6 @@ $logo-start-width: $logo-half-width;
 
     @media (min-width: 1440px) {
         --logo-side-padding: 60px;
-
-        &__info-text {
-            display: none;
-        }
 
         .header {
             .search-box {
