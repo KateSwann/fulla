@@ -5,10 +5,10 @@ import { onBeforeRouteLeave } from "vue-router";
 import HeaderItem from '@/components/Base/HeaderItem.vue'
 
 const showHeader = ref(true)
-const childComponent = ref();
+const headerComponent = ref();
 
 onMounted(() => {
-  childComponent.value.setSearchInputFocus();
+  headerComponent.value.setSearchInputFocus();
 });
 
 onBeforeRouteLeave((to, from, next) => {
@@ -28,7 +28,7 @@ onBeforeRouteLeave((to, from, next) => {
 <template>
     <div class="loader-view">
         <Transition name="header">
-            <HeaderItem v-if="showHeader" ref="childComponent" />
+            <HeaderItem v-if="showHeader" ref="headerComponent" />
         </Transition>
 
         <p class="loader-view__info-text">

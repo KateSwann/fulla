@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted }  from 'vue'
+import { ref, nextTick, onMounted }  from 'vue'
 import { useRoute, useRouter, onBeforeRouteUpdate } from "vue-router";
 import { useGrid } from 'vue-screen'
 
@@ -18,7 +18,8 @@ const grid = useGrid({
 })
 
 const searchQuery = ref("");
-const searchInput = ref(null)
+const searchMainInput = ref(null)
+const searchOverlayInput = ref(null)
 let isSearchOverlayOpen = ref(false);
 let isSearchDropdownOpen = ref(false);
 let searchSuggestionsListTestData = ref([
@@ -94,10 +95,20 @@ function clearSearchField() {
 
 function toggleSearchOverlay() {
     isSearchOverlayOpen.value = !isSearchOverlayOpen.value;
+
+    if(!isSearchOverlayOpen.value) {
+        nextTick(() => {
+            searchMainInput.value.focus();
+        });
+    }
 }
 
 function openSearchOverlay() {
     isSearchOverlayOpen.value = true;
+
+    nextTick(() => {
+        searchOverlayInput.value.focus();
+    });
 }
 
 function openSearchDropdown() {
@@ -116,11 +127,13 @@ function clearSearchSuggestion(id) {
 }
 
 function setSearchInputFocus() {
-    searchInput.value.focus()
+    nextTick(() => {
+        searchMainInput.value.focus();
+    })
 }
 
 defineExpose({
-    setSearchInputFocus
+    setSearchInputFocus,
 })
 </script>
 
@@ -138,7 +151,7 @@ defineExpose({
                         @keyup.enter="setUrlQueryParams"
                         @keyup="openSearchOverlay(), updateDropdownList()"
                         v-model.trim="searchQuery"
-                        ref="searchInput"
+                        ref="searchMainInput"
                         class="search-box__input"
                         :class="{ 'search-box__input--empty': !searchQuery }"
                         type="search"
@@ -207,6 +220,7 @@ defineExpose({
                     <input
                         @keyup.enter="setUrlQueryParams"
                         v-model.trim="searchQuery"
+                        ref="searchOverlayInput"
                         class="search-box__input"
                         :class="{ 'search-box__input--empty': !searchQuery }"
                         type="search"
