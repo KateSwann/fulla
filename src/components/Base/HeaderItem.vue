@@ -20,6 +20,7 @@ const grid = useGrid({
 const searchQuery = ref("");
 const searchInput = ref(null)
 let isSearchOverlayOpen = ref(false);
+let isSearchDropdownOpen = ref(false);
 let searchSuggestionsListTestData = ref([
     {
         id: 1,
@@ -65,6 +66,7 @@ let searchSuggestionsListTestData = ref([
 
 onBeforeRouteUpdate(async () => {
     isSearchOverlayOpen.value = await false;
+    isSearchDropdownOpen.value = await false;
 })
 
 onMounted(() => {
@@ -72,16 +74,21 @@ onMounted(() => {
 });
 
 const getUrlQueryParams = async () => {
-  await router.isReady();
-  searchQuery.value = route.query.q;
+    await router.isReady();
+    searchQuery.value = route.query.q;
 }
 
 const setUrlQueryParams = () => {
     router.push({ name: 'search', query: { q: searchQuery.value } });
 }
 
+const updateDropdownList = () => {
+    searchQuery.value ? isSearchDropdownOpen.value = true : isSearchDropdownOpen.value = false;
+}
+
 function clearSearchField() {
     searchQuery.value = "";
+    isSearchDropdownOpen.value = false;
     router.push({ name: 'start' });
 }
 
@@ -89,12 +96,26 @@ function toggleSearchOverlay() {
     isSearchOverlayOpen.value = !isSearchOverlayOpen.value;
 }
 
+function openSearchOverlay() {
+    isSearchOverlayOpen.value = true;
+}
+
+function openSearchDropdown() {
+    isSearchDropdownOpen.value = true;
+}
+
+function closeSearchDropdown() {
+    if (isSearchDropdownOpen.value) {
+        isSearchDropdownOpen.value = false;
+    }
+}
+
 function clearSearchSuggestion(id) {
     const saggestionItem = searchSuggestionsListTestData.value.find(el => el.id === id);
     saggestionItem.isVisible = false;
 }
 
-function setSearchInputFocus(){
+function setSearchInputFocus() {
     searchInput.value.focus()
 }
 
@@ -108,11 +129,14 @@ defineExpose({
         <div class="header-animated-logo">
             <RouterLink :to="{ name: 'start' }"
                         class="header-animated-logo__prefix"></RouterLink>
-            <div class="header-animated-logo__stretch-line">
+            <div v-click-outside="closeSearchDropdown"
+                 class="header-animated-logo__stretch-line">
                 <div class="header-animated-logo__search-box
-                            search-box">
+                            search-box
+                            search-box--animated">
                     <input
                         @keyup.enter="setUrlQueryParams"
+                        @keyup="openSearchOverlay(), updateDropdownList()"
                         v-model.trim="searchQuery"
                         ref="searchInput"
                         class="search-box__input"
@@ -121,7 +145,7 @@ defineExpose({
                         name="q"
                         autocomplete="off"
                         placeholder="Поиск..."
-                        @click="grid.isMobile ? toggleSearchOverlay() : null"
+                        @click="openSearchOverlay(), openSearchDropdown()"
                     />
 
                     <span class="search-box__button-clear"
@@ -131,7 +155,8 @@ defineExpose({
                 </div>
 
                 <!-- START search dropdown box -->
-                <section class="search-dropdown-box">
+                <section class="search-dropdown-box"
+                         v-show="isSearchDropdownOpen">
                     <div class="search-dropdown-box__content">
                         <div class="search-dropdown-results-list">
                             <template v-for="(suggestion, index) in searchSuggestionsListTestData"
@@ -173,6 +198,7 @@ defineExpose({
             <div class="header-animated-logo__postfix"></div>
         </div>
 
+        <!-- START search overlay box -->
         <section class="search-overlay-box"
                  v-show="isSearchOverlayOpen">
             <div class="search-overlay-box__content">
@@ -220,10 +246,11 @@ defineExpose({
             </div>
 
             <div class="search-overlay-box__button-close"
-                 @click="toggleSearchOverlay">
+                 @click="toggleSearchOverlay(), closeSearchDropdown()">
                 <IconCross />
             </div>
         </section>
+        <!-- END search overlay box -->
     </header>
 </template>
 
@@ -361,6 +388,7 @@ defineExpose({
     }
 
     .search-overlay-box {
+        height: 100vh;
         padding: 40px 0 20px;
         position: fixed;
         left: 0;
@@ -542,6 +570,10 @@ defineExpose({
                 margin: 0 4.8px 0 3px
             }
         }
+
+        .search-dropdown-box {
+            display: none;
+        }
     }
 
     @media (min-width: 768px) and (max-width: 1439px) {
@@ -554,6 +586,10 @@ defineExpose({
             &__button-clear {
                 margin: 0 10.8px 0 7px;
             }
+        }
+
+        .search-overlay-box {
+            display: none;
         }
     }
 
@@ -584,6 +620,10 @@ defineExpose({
             &__button-clear {
                 margin: 0 10.8px 0 8px;
             }
+        }
+
+        .search-overlay-box {
+            display: none;
         }
     }
 }

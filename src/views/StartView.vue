@@ -130,7 +130,7 @@ $logo-start-width: $logo-half-width;
         color: rgba($color: #000000, $alpha: .3);
     }
 
-    .header {
+    & > .header {
         position: absolute;
         top: 50%;
         left: 0;
@@ -139,32 +139,38 @@ $logo-start-width: $logo-half-width;
         height: 0;
 
         .search-box {
-            opacity: 0;
+            &--animated {
+                opacity: 0;
+            }
         }
     }
 
-    .header-leave-active {
+    & > .header-leave-active {
         animation: .7s movingHeaderCenterToTop forwards;
     }
 
-    .search-overlay-box {
-        display: none;
-    }
-
     @media (max-width: 767px) {
+        $search-top-indent: 9vh;
         $logo-start-width: 20px;
         --logo-side-padding: 20px;
 
-        .header {
-            transform: translateY(calc(-50% - 9vh));
+        & > .header {
+            transform: translateY(calc(-50% - $search-top-indent));
 
             .search-box {
-                animation: .85s movingSearchTopToBottom 1.1s forwards;
+                &--animated {
+                    animation: .85s movingSearchTopToBottom 1.1s forwards;
+                }
             }
 
             .header-animated-logo__stretch-line {
                 animation: 0.9s logoFullWidthStretch forwards;
             }
+
+        }
+
+        .search-overlay-box {
+            transform: translateY(calc(-50% + $search-top-indent));
         }
     }
 
@@ -172,11 +178,13 @@ $logo-start-width: $logo-half-width;
         $logo-start-width: 60px;
         --logo-side-padding: 60px;
 
-        .header {
+        & > .header {
             transform: translateY(calc(-50% - 4.5vh));
 
             .search-box {
-                animation: .85s movingSearchTopToBottom 1.1s forwards;
+                &--animated {
+                    animation: .85s movingSearchTopToBottom 1.1s forwards;
+                }
             }
 
             .header-animated-logo__stretch-line {
@@ -188,9 +196,11 @@ $logo-start-width: $logo-half-width;
     @media (min-width: 1440px) {
         --logo-side-padding: 60px;
 
-        .header {
+        & > .header {
             .search-box {
-                animation: .85s movingSearchTopToBottom 2.4s forwards;
+                &--animated {
+                    animation: .85s movingSearchTopToBottom 2.4s forwards;
+                }
             }
 
             .header-animated-logo__stretch-line {

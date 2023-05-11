@@ -1,11 +1,5 @@
 <script>
-import vClickOutside from 'click-outside-vue3';
-
 export default {
-    directives: {
-        clickOutside: vClickOutside.directive
-    },
-
     methods: {
         close() {
             this.$emit('close');
