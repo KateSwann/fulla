@@ -18,7 +18,7 @@ onBeforeRouteLeave((to, from, next) => {
             next()
         // Timer counter equals movingHeaderCenterToTop animation
         // duratin minus 50ms
-        }, 650)
+        }, 300)
     } else {
         next();
     }
@@ -111,6 +111,20 @@ $logo-start-width: $logo-half-width;
     }
 }
 
+@keyframes fadingHeader {
+    from {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: .35;
+    }
+
+    to {
+        opacity: 0;
+    }
+}
+
 .loader-view {
     position: fixed;
     top: 0;
@@ -146,7 +160,7 @@ $logo-start-width: $logo-half-width;
     }
 
     & > .header-leave-active {
-        animation: .7s movingHeaderCenterToTop forwards;
+        animation: .35s fadingHeader forwards;
     }
 
     @media (max-width: 767px) {
@@ -159,12 +173,12 @@ $logo-start-width: $logo-half-width;
 
             .search-box {
                 &--animated {
-                    animation: .85s movingSearchTopToBottom 1.1s forwards;
+                    animation: .425s movingSearchTopToBottom .55s forwards;
                 }
             }
 
             .header-animated-logo__stretch-line {
-                animation: 0.9s logoFullWidthStretch forwards;
+                animation: 0.45s logoFullWidthStretch forwards;
             }
 
         }
@@ -183,12 +197,12 @@ $logo-start-width: $logo-half-width;
 
             .search-box {
                 &--animated {
-                    animation: .85s movingSearchTopToBottom 1.1s forwards;
+                    animation: .425s movingSearchTopToBottom .55s forwards;
                 }
             }
 
             .header-animated-logo__stretch-line {
-                animation: 0.9s logoFullWidthStretch forwards;
+                animation: 0.45s logoFullWidthStretch forwards;
             }
         }
     }
@@ -199,14 +213,14 @@ $logo-start-width: $logo-half-width;
         & > .header {
             .search-box {
                 &--animated {
-                    animation: .85s movingSearchTopToBottom 2.4s forwards;
+                    animation: .425s movingSearchTopToBottom 1.2s forwards;
                 }
             }
 
             .header-animated-logo__stretch-line {
                 animation: logoHalfWidthStretch, logoFullWidthStretch;
-                animation-duration: .7s, .85s;
-                animation-delay: 0s, 1.7s;
+                animation-duration: .35s, .425s;
+                animation-delay: 0s, .85s;
                 animation-fill-mode: forwards, forwards;
             }
         }
