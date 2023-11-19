@@ -14,9 +14,9 @@ const props = defineProps({
     resultItem: {
         id: Number,
         title: String,
-        text: String,
-        date: String,
-        time: Number,
+        description: String,
+        datetime: String,
+        posts: Array,
     }
 });
 </script>
@@ -31,7 +31,7 @@ const props = defineProps({
                 <RouterLink :to="{
                                 name: 'article',
                                 params: {
-                                    resultItemId: resultItem.id,
+                                    resultItemId: resultItem.posts[0].id,
                                 },
                             }"
                             class="modal-result-item-article__title-link">
@@ -39,13 +39,13 @@ const props = defineProps({
                 </RouterLink>
 
                 <p class="modal-result-item-article__text">
-                    {{ resultItem.text }}
+                    {{ resultItem.description }}
                 </p>
 
                 <RouterLink :to="{
                                 name: 'article',
                                 params: {
-                                    resultItemId: resultItem.id,
+                                    resultItemId: resultItem.posts[0].id,
                                 },
                             }"
                              class="modal-result-item-article__button-read-more">

@@ -6,7 +6,20 @@ import IconCross from '@/components/Icons/Controls/IconCross.vue'
 import IconOpen from '@/components/Icons/Controls/IconOpen.vue'
 import ResultItemArticlePopup from '@/components/ResultItem/ResultItemArticlePopup.vue'
 
+const props = defineProps({
+    resultItem: {
+        id: Number,
+        title: String,
+        description: String,
+        datetime: String,
+        posts: Array,
+    }
+});
+
 let isShowResultItemPopup = ref(false);
+const date = new Date(props.resultItem.datetime);
+const monthsRU = ['Янв', 'Фев', 'Мар', 'Апр', 'Мая', 'Июня', 'Июля', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек']
+
 
 function toggleResultItemPopup() {
     isShowResultItemPopup.value = !isShowResultItemPopup.value;
@@ -22,34 +35,35 @@ const closeResultItem = () => {
     emit('closeResultItem')
 }
 
-const props = defineProps({
-    resultItem: {
-        id: Number,
-        title: String,
-        text: String,
-        date: String,
-        time: Number,
-    }
-});
+function formatDateTimeToDate() {
+    return date.getDate() + ' ' +
+        monthsRU[date.getMonth()] + ' ' +
+        date.getFullYear();
+}
+
+function formatDateTimeToTime() {
+    return date.getHours() + ':' +
+        date.getMinutes();
+}
 </script>
 
 <template>
     <article class="result-item-small-card">
         <div class="result-item-small-card__side-content">
-            <span class="result-item-small-card__date">{{ resultItem.date }},</span>
-            <span class="result-item-small-card__time">{{ resultItem.time }}</span>
+            <span class="result-item-small-card__date">{{ formatDateTimeToDate() }},</span>
+            <span class="result-item-small-card__time">{{ formatDateTimeToTime() }}</span>
         </div>
 
         <div class="result-item-small-card__main-content">
             <h2 class="result-item-small-card__title">{{ resultItem.title }}</h2>
 
             <p class="result-item-small-card__text-container">
-                <span class="result-item-small-card__text">{{ resultItem.text }}</span>
+                <span class="result-item-small-card__text">{{ resultItem.description }}</span>
 
                 <RouterLink :to="{
                                 name: 'article',
                                 params: {
-                                    resultItemId: resultItem.id,
+                                    resultItemId: resultItem.posts[0].id,
                                 },
                             }"
                         class="result-item-small-card__button-read-more">

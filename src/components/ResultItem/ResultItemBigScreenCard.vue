@@ -8,11 +8,19 @@ import IconCross from '@/components/Icons/Controls/IconCross.vue'
 import IconOpen from '@/components/Icons/Controls/IconOpen.vue'
 import ResultItemArticlePopup from '@/components/ResultItem/ResultItemArticlePopup.vue'
 
-let isShowResultItemPopup = ref(false);
+const props = defineProps({
+    resultItem: {
+        id: Number,
+        title: String,
+        description: String,
+        datetime: String,
+        posts: Array,
+    }
+});
 
-function toggleResultItemPopup() {
-    isShowResultItemPopup.value = !isShowResultItemPopup.value;
-}
+let isShowResultItemPopup = ref(false);
+const date = new Date(props.resultItem.datetime);
+const monthsRU = ['Янв', 'Фев', 'Мар', 'Апр', 'Мая', 'Июня', 'Июля', 'Авг', 'Сен', 'Окт', 'Ноя', 'Дек']
 
 function cancel() {
     isShowResultItemPopup.value = false;
@@ -24,29 +32,34 @@ const closeResultItem = () => {
     emit('closeResultItem')
 }
 
-const props = defineProps({
-    resultItem: {
-        id: Number,
-        title: String,
-        text: String,
-        date: String,
-        time: Number,
-    }
-});
+function toggleResultItemPopup() {
+    isShowResultItemPopup.value = !isShowResultItemPopup.value;
+}
+
+function formatDateTimeToDate() {
+    return date.getDate() + ' ' +
+        monthsRU[date.getMonth()] + ' ' +
+        date.getFullYear();
+}
+
+function formatDateTimeToTime() {
+    return date.getHours() + ':' +
+        date.getMinutes();
+}
 </script>
 
 <template>
     <div class="result-item-big-card-container">
         <article class="result-item-big-card">
             <div class="result-item-big-card__side-content">
-                <span class="result-item-big-card__date">{{ resultItem.date }},</span>
-                <span class="result-item-big-card__time">{{ resultItem.time }}</span>
+                <span class="result-item-big-card__date">{{ formatDateTimeToDate() }},</span>
+                <span class="result-item-big-card__time">{{ formatDateTimeToTime() }}</span>
             </div>
 
             <div class="result-item-big-card__main-content">
                 <h2 class="result-item-big-card__title">{{ resultItem.title }}</h2>
 
-                <p class="result-item-big-card__text">{{ resultItem.text }}</p>
+                <p class="result-item-big-card__text">{{ resultItem.description }}</p>
             </div>
         </article>
 
@@ -56,27 +69,30 @@ const props = defineProps({
             <RouterLink :to="{
                                 name: 'article',
                                 params: {
-                                    resultItemId: resultItem.id,
+                                    resultItemId: resultItem.posts[0].id,
                                 },
                             }"
                         target='_blank'
                         class="result-item-big-preview-card__title-link">
-                <h2 class="result-item-big-preview-card__title">{{ resultItem.title }}</h2>
+                <h2 class="result-item-big-preview-card__title">{{ resultItem.posts[0].title }}</h2>
             </RouterLink>
 
-            <p class="result-item-big-preview-card__text">
-                {{ resultItem.text }}
-                <RouterLink :to="{
-                                name: 'article',
-                                params: {
-                                    resultItemId: resultItem.id,
-                                },
-                            }"
-                        target='_blank'
-                        class="result-item-big-preview-card__button-read-more">
-                        Читать подробнее
-                </RouterLink>
-            </p>
+            <template v-for="(article, index) in resultItem.posts"
+                                        :key="index">
+                <p class="result-item-big-preview-card__text">
+                    {{ article.content }}
+                    <RouterLink :to="{
+                                    name: 'article',
+                                    params: {
+                                        resultItemId: article.id,
+                                    },
+                                }"
+                            target='_blank'
+                            class="result-item-big-preview-card__button-read-more">
+                            Читать подробнее
+                    </RouterLink>
+                </p>
+            </template>
 
             <div class="controls-buttons-group">
                 <div class="controls-buttons-group__button
@@ -88,7 +104,7 @@ const props = defineProps({
                 <RouterLink :to="{
                                 name: 'article',
                                 params: {
-                                    resultItemId: resultItem.id,
+                                    resultItemId: resultItem.posts[0].id,
                                 },
                             }"
                             target='_blank'
