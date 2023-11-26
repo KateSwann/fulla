@@ -9,8 +9,8 @@ import IconCross from '@/components/Icons/Controls/IconCross.vue'
 
 const router = useRouter()
 const route = useRoute()
-const { resultsTotalCount, showSearchSuggestions } = storeToRefs(useResultStore())
-const { fetchPostsSearchResults } = useResultStore()
+const { resultsTotalCount, showSearchSuggestions, enteredQueries } = storeToRefs(useResultStore())
+const { fetchPostsSearchResults, addEnteredQueryToArray, removeEnteredQueryFromArray } = useResultStore()
 
 const grid = useGrid({
     sm: 0,
@@ -26,48 +26,6 @@ const searchMainInput = ref(null)
 const searchOverlayInput = ref(null)
 let isSearchOverlayOpen = ref(false);
 let isSearchDropdownOpen = ref(false);
-let searchSuggestionsListTestData = ref([
-    {
-        id: 1,
-        title: 'yandex practicum кому сейчас принадлежит',
-        isVisible: true,
-    },
-    {
-        id: 2,
-        title: 'Куда проще всего переехать без оформления визы',
-        isVisible: true,
-    },
-    {
-        id: 3,
-        title: 'гриша коченов',
-        isVisible: true,
-    },
-    {
-        id: 4,
-        title: 'оформление ИП в Грузии через дом юстиций',
-        isVisible: true,
-    },
-    {
-        id: 5,
-        title: 'yandex practicum кому сейчас принадлежит',
-        isVisible: true,
-    },
-    {
-        id: 6,
-        title: 'Куда проще всего переехать без оформления визы',
-        isVisible: true,
-    },
-    {
-        id: 7,
-        title: 'гриша коченов',
-        isVisible: true,
-    },
-    {
-        id: 8,
-        title: 'оформление ИП в Грузии через дом юстиций',
-        isVisible: true,
-    },
-])
 
 onBeforeRouteUpdate(async () => {
     isSearchOverlayOpen.value = await false;
@@ -83,8 +41,8 @@ const getUrlQueryParams = async () => {
     searchQuery.value = route.query.q;
 }
 
-const setUrlQueryParams = () => {
-    router.push({ name: 'search', query: { q: searchQuery.value } });
+const setUrlQueryParams = (userQuery) => {
+    router.push({ name: 'search', query: { q: userQuery } });
 }
 
 const updateDropdownList = () => {
@@ -125,11 +83,6 @@ function closeSearchDropdown() {
     }
 }
 
-function clearSearchSuggestion(id) {
-    const saggestionItem = searchSuggestionsListTestData.value.find(el => el.id === id);
-    saggestionItem.isVisible = false;
-}
-
 function setSearchInputFocus() {
     nextTick(() => {
         searchMainInput.value.focus();
@@ -152,7 +105,7 @@ defineExpose({
                             search-box
                             search-box--animated">
                     <input
-                        @keyup.enter="setUrlQueryParams"
+                        @keyup.enter="addEnteredQueryToArray(searchQuery), setUrlQueryParams(searchQuery)"
                         @keyup="openSearchOverlay(), updateDropdownList(), fetchPostsSearchResults(searchQuery)"
                         v-model.trim="searchQuery"
                         ref="searchMainInput"
@@ -233,7 +186,7 @@ defineExpose({
                 <div class="search-overlay-box__search-box
                             search-box">
                     <input
-                        @keyup.enter="setUrlQueryParams"
+                        @keyup.enter="addEnteredQueryToArray(searchQuery), setUrlQueryParams(searchQuery)"
                         v-model.trim="searchQuery"
                         ref="searchOverlayInput"
                         class="search-box__input"
@@ -250,28 +203,34 @@ defineExpose({
                     </span>
                 </div>
 
-                <ul class="search-overlay-box__search-suggestion-list
-                           search-suggestion-list">
-                    <template v-for="(suggestion, index) in searchSuggestionsListTestData"
-                              :key="index">
-                        <li class="search-suggestion-list__item
-                                   search-suggestion-list-item"
-                            v-show="suggestion.isVisible">
-                            <RouterLink :to="{
-                                            name: 'article',
-                                            params: { resultItemId: 1 },
-                                         }"
-                                        class="search-suggestion-list-item__text">
-                                {{ suggestion.title }}
-                            </RouterLink>
 
-                            <div class="search-suggestion-list-item__button-clear"
-                                  @click="clearSearchSuggestion(suggestion.id)">
-                                <IconCross />
-                            </div>
-                        </li>
-                    </template>
-                </ul>
+                <template v-if="enteredQueries.length">
+                    <ul class="search-overlay-box__search-suggestion-list
+                               search-suggestion-list">
+                        <template v-for="(suggestion, index) in enteredQueries"
+                                  :key="index">
+                            <li class="search-suggestion-list__item
+                                       search-suggestion-list-item"
+                                v-show="suggestion.isVisible">
+                                <span class="search-suggestion-list-item__text"
+                                      @click="setUrlQueryParams(suggestion.title)">
+                                    {{ suggestion.title }} {{ index }}
+                                </span>
+
+                                <div class="search-suggestion-list-item__button-clear"
+                                      @click="removeEnteredQueryFromArray(index)">
+                                    <IconCross />
+                                </div>
+                            </li>
+                        </template>
+                    </ul>
+                </template>
+
+                <template v-else>
+                    <span class="search-view__empty-text">
+                        Вы еще ничего не искали
+                    </span>
+                </template>
             </div>
 
             <div class="search-overlay-box__button-close"

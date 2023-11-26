@@ -7,6 +7,7 @@ export const useResultStore = defineStore('result', {
         results: ref([]),
         resultsSearchSuggestions: ref([]),
         resultsTotalCount: ref(null),
+        enteredQueries: ref([]),
         query: ref(''),
         error: null,
         isLoading: false,
@@ -46,6 +47,16 @@ export const useResultStore = defineStore('result', {
             finally {
                 this.isLoading = false;
             }
+        },
+
+        addEnteredQueryToArray(userQuery) {
+            this.enteredQueries.push({ title: userQuery, isVisible: true });
+            console.log(this.enteredQueries);
+        },
+
+        removeEnteredQueryFromArray(queryIndex) {
+            this.enteredQueries.splice(queryIndex, 1);
+            console.log(this.enteredQueries);
         },
     },
 })
