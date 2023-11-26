@@ -1,5 +1,6 @@
 import { ref } from 'vue'
 import { defineStore } from 'pinia'
+import { useLocalStorage } from "@vueuse/core"
 import axios from 'axios'
 
 export const useResultStore = defineStore('result', {
@@ -7,7 +8,7 @@ export const useResultStore = defineStore('result', {
         results: ref([]),
         resultsSearchSuggestions: ref([]),
         resultsTotalCount: ref(null),
-        enteredQueries: ref([]),
+        enteredQueries: useLocalStorage('enteredQueries', []),
         query: ref(''),
         error: null,
         isLoading: false,
