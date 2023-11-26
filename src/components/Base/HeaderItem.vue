@@ -1,12 +1,16 @@
 <script setup>
 import { ref, nextTick, onMounted }  from 'vue'
 import { useRoute, useRouter, onBeforeRouteUpdate } from "vue-router";
+import { storeToRefs } from 'pinia'
+import { useResultStore } from '@/stores/result';
 import { useGrid } from 'vue-screen'
 
 import IconCross from '@/components/Icons/Controls/IconCross.vue'
 
 const router = useRouter()
 const route = useRoute()
+const { resultsTotalCount, showSearchSuggestions } = storeToRefs(useResultStore())
+const { fetchPostsSearchResults } = useResultStore()
 
 const grid = useGrid({
     sm: 0,
@@ -149,7 +153,7 @@ defineExpose({
                             search-box--animated">
                     <input
                         @keyup.enter="setUrlQueryParams"
-                        @keyup="openSearchOverlay(), updateDropdownList()"
+                        @keyup="openSearchOverlay(), updateDropdownList(), fetchPostsSearchResults(searchQuery)"
                         v-model.trim="searchQuery"
                         ref="searchMainInput"
                         class="search-box__input"
@@ -169,14 +173,14 @@ defineExpose({
 
                 <!-- START search dropdown box -->
                 <section class="search-dropdown-box"
-                         v-show="isSearchDropdownOpen">
+                         v-show="isSearchDropdownOpen&&searchQuery">
                     <div class="search-dropdown-box__content">
                         <div class="search-dropdown-results-list">
-                            <template v-for="(suggestion, index) in searchSuggestionsListTestData"
+                            <template v-for="(suggestion, index) in showSearchSuggestions"
                                     :key="index">
                                 <RouterLink :to="{
                                                     name: 'article',
-                                                    params: { resultItemId: 1 },
+                                                    params: { resultItemId: suggestion.posts[0].id },
                                                 }"
                                             class="search-dropdown-results-list-item">
                                     <span class="search-dropdown-results-list-item__text">
@@ -184,25 +188,36 @@ defineExpose({
                                     </span>
 
                                     <span class="search-dropdown-results-list-item__total">
-                                        1345
+                                        {{ suggestion.posts.length }}
                                     </span>
                                 </RouterLink>
                             </template>
 
-                            <RouterLink :to="{
-                                                name: 'search',
-                                                query: { q: searchQuery }
-                                            }"
-                                        class="search-dropdown-results-list__item
-                                               search-dropdown-results-list-item">
-                                <span class="search-dropdown-results-list-item__text">
-                                    Смотреть все 3204 результатов для &#171;{{searchQuery}}&#187;
-                                </span>
+                            <template v-if="resultsTotalCount">
+                                <RouterLink :to="{
+                                                    name: 'search',
+                                                    query: { q: searchQuery }
+                                                }"
+                                            class="search-dropdown-results-list__item
+                                                search-dropdown-results-list-item">
+                                    <span class="search-dropdown-results-list-item__text">
+                                        Смотреть все {{ resultsTotalCount }} результатов для &#171;{{searchQuery}}&#187;
+                                    </span>
 
-                                <span class="search-dropdown-results-list-item__icon-enter">
-                                    Enter
-                                </span>
-                            </RouterLink>
+                                    <span class="search-dropdown-results-list-item__icon-enter">
+                                        Enter
+                                    </span>
+                                </RouterLink>
+                            </template>
+
+                            <template v-else>
+                                <p class="search-dropdown-results-list__item
+                                        search-dropdown-results-list-item">
+                                    <span class="search-dropdown-results-list-item__text">
+                                        Ничего не найдено
+                                    </span>
+                                </p>
+                            </template>
                         </div>
                     </div>
                 </section>

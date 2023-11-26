@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onBeforeMount, onMounted, onUpdated }  from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useResultStore } from '@/stores/result';
 import { useGrid } from 'vue-screen'
@@ -8,9 +8,8 @@ import { useGrid } from 'vue-screen'
 import ResultItemBigScreenCard from '@/components/ResultItem/ResultItemBigScreenCard.vue'
 import ResultItemSmallScreenCard from '@/components/ResultItem/ResultItemSmallScreenCard.vue'
 
-const router = useRouter()
 const route = useRoute()
-const { results, resultsTotalCount, modifyResults } = storeToRefs(useResultStore())
+const { query, resultsTotalCount, modifyResults } = storeToRefs(useResultStore())
 const { fetchPostsSearchResults } = useResultStore()
 
 const grid = useGrid({
@@ -23,32 +22,21 @@ const grid = useGrid({
     isDesktop: grid => grid.lg,
 })
 
-let urlQueryParams = ref("");
 let isAnyResultItemActive = ref(false);
 let showSearchContent = ref(false)
 
 onBeforeMount(() => {
-    modifySearchResults();
+    fetchPostsSearchResults(route.query.q);
 });
 
 onMounted(() => {
-    getUrlQueryParams()
     showSearchContent.value = true;
-    fetchPostsSearchResults();
+    fetchPostsSearchResults(route.query.q);
 });
 
 onUpdated(() => {
-    getUrlQueryParams();
+    fetchPostsSearchResults(route.query.q);
 });
-
-const getUrlQueryParams = async () => {
-    await router.isReady();
-    urlQueryParams.value = route.query.q;
-}
-
-function modifySearchResults() {
-    modifyResults.value = results.value.map(i => ({...i, isActive: false}));
-}
 
 function closeAllResultItems() {
     modifyResults.value.map(i => i.isActive = false);
@@ -71,26 +59,13 @@ const nounCounterDeclension = computed(() => {
         :'тов'
     }`;
 });
-
-const filteredSearchResults = computed(() => {
-    if (urlQueryParams.value) {
-        return modifyResults.value.filter((resultItem) => {
-            return urlQueryParams.value
-                    .toLowerCase()
-                    .split(" ")
-                    .every((v) => resultItem.description.toLowerCase().includes(v))
-        });
-    } else {
-        return modifyResults.value;
-    }
-});
 </script>
 
 <template>
     <Transition name="search-content">
         <main class="search-view" v-if="showSearchContent"
-            v-show="filteredSearchResults">
-            <template v-if="filteredSearchResults.length">
+            v-show="modifyResults">
+            <template v-if="modifyResults.length">
                 <section class="search-results-counter-block">
                     Fulla /
                     <span class="search-results-counter-block__highlighted-text">
@@ -102,8 +77,8 @@ const filteredSearchResults = computed(() => {
                 <section class="search-view__content"
                      v-show="grid.isMobileAndTablet">
                     <TransitionGroup name="search-results-list" tag="ul">
-                        <template v-if="urlQueryParams">
-                            <template v-for="(resultItem, index) in filteredSearchResults"
+                        <template v-if="query">
+                            <template v-for="(resultItem, index) in modifyResults"
                                     :key="index">
                                 <ResultItemSmallScreenCard
                                     @click="toggleResultItemOpen(resultItem)"
@@ -124,8 +99,8 @@ const filteredSearchResults = computed(() => {
                         :class="{ 'search-view__left-column--result-item-active': isAnyResultItemActive }"
                         >
                         <TransitionGroup name="search-results-list" tag="ul">
-                            <template v-if="urlQueryParams">
-                                <template v-for="(resultItem, index) in filteredSearchResults"
+                            <template v-if="query">
+                                <template v-for="(resultItem, index) in modifyResults"
                                         :key="index">
                                     <ResultItemBigScreenCard
                                         @click="toggleResultItemOpen(resultItem)"
