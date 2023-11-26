@@ -1,5 +1,5 @@
 <script setup>
-import { onBeforeMount, onUpdated } from 'vue';
+import { onBeforeMount } from 'vue';
 import { useRoute } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { usePostStore } from '@/stores/post';
@@ -9,30 +9,25 @@ import ArticleSocialCard from '@/components/Article/ArticleSocialCard.vue'
 import ArticleQuestionsSection from '@/components/Article/ArticleQuestionsSection.vue'
 
 const route = useRoute()
-const { getPost } = storeToRefs(usePostStore())
+const { post } = storeToRefs(usePostStore())
 const { fetchPost } = usePostStore()
 
-let articleId = route.params.resultItemId;
-
 onBeforeMount(() => {
-    fetchPost(articleId);
-});
+    post.value = []; // убирает мерцание предыдущего заголовка поста, прежде чем загрузится новый
+})
 
-onUpdated(() => {
-    fetchPost(articleId);
-});
+fetchPost(route.params.resultItemId);
 </script>
 
 <template>
     <main class="article-view">
-        <article class="article-view__content">
+        <article class="article-view__content"
+                 v-if="post">
             <ArticleLabelsList class="article-view__article-labels-list" />
 
-            <template v-if="getPost">
-                <h1 class="article-view__title">{{ getPost.title }}</h1>
+            <h1 class="article-view__title">{{ post.title }}</h1>
 
-                <p class="article-view__text">{{ getPost.content }}</p>
-            </template>
+            <p class="article-view__text">{{ post.content }}</p>
 
             <ArticleSocialCard class="article-view__article-social-network-card" />
 

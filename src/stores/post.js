@@ -4,21 +4,14 @@ import axios from 'axios'
 
 export const usePostStore = defineStore('post', {
     state: () => ({
-        post: ref([]),
+        post: ref(null),
         error: null,
-        loading: false,
+        isLoading: false,
     }),
-
-    getters: {
-        getPost(state) {
-            return state.post
-        }
-    },
 
     actions: {
         async fetchPost(postId) {
-            this.post = ref([])
-            this.loading = true
+            this.isLoading = true
             try {
                 const data = await axios.get(`http://45.92.176.110/posts/${postId}`)
                 this.post = data.data
@@ -28,7 +21,7 @@ export const usePostStore = defineStore('post', {
                 console.log('ERROR POST', this.error);
             }
             finally {
-                this.loading = false;
+                this.isLoading = false;
             }
         },
     },
