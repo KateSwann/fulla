@@ -50,7 +50,10 @@ export const useResultStore = defineStore('result', {
         },
 
         addEnteredQueryToArray(userQuery) {
-            this.enteredQueries.push({ title: userQuery, isVisible: true });
+            this.enteredQueries = [
+                { title: userQuery, isVisible: true },
+                 ...this.enteredQueries
+            ];
             console.log(this.enteredQueries);
         },
 
